@@ -1,59 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "../context/GlobalState";
+import Bot from "./Bot";
 
 function BotList() {
+  const { bots } = useContext(GlobalContext);
+
   return (
     <div className="BotList">
       <table id="botlist-table">
-        <tr>
-          <th>ID</th>
-          <th>Platform</th>
-          <th>Status</th>
-          <th>Commands</th>
-          <th>SSH</th>
-          <th>Remove</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>Linux</td>
-          <td>Online</td>
-          <td>
-            <button>Commands</button>
-          </td>
-          <td>
-            <button>SSH</button>
-          </td>
-          <td>
-            <button>Delete?</button>
-          </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Windows</td>
-          <td>Offline</td>
-          <td>
-            <button>Commands</button>
-          </td>
-          <td>
-            <button>SSH</button>
-          </td>
-          <td>
-            <button>Delete?</button>
-          </td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Windows</td>
-          <td>Online</td>
-          <td>
-            <button>Commands</button>
-          </td>
-          <td>
-            <button>SSH</button>
-          </td>
-          <td>
-            <button>Delete?</button>
-          </td>
-        </tr>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>IP address</th>
+            <th>Platform</th>
+            <th>Status</th>
+            <th>Current tasks</th>
+            <th>Commands</th>
+            <th>SSH</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bots.map((bot) => (
+            <Bot key={bot.id} bot={bot} />
+          ))}
+        </tbody>
       </table>
     </div>
   );

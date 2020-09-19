@@ -5,14 +5,16 @@ import BotList from "./components/BotList";
 import AddBot from "./components/AddBot";
 import BotnetCommands from "./components/BotnetCommands";
 
+import { GlobalProvider } from "./context/GlobalState";
+
 function App() {
   return (
-    <div className="App">
+    <GlobalProvider>
       <Banner />
       <BotnetCommands />
       <BotList />
       <AddBot />
-    </div>
+    </GlobalProvider>
   );
 }
 
