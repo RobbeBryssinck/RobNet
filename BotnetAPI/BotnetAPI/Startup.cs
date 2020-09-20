@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using BotnetAPI.Models;
 
 namespace BotnetAPI
 {
@@ -25,6 +27,8 @@ namespace BotnetAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BotnetContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("BotnetAPIDB")));
             services.AddControllers();
         }
 
@@ -40,6 +44,7 @@ namespace BotnetAPI
 
             app.UseRouting();
 
+            //app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
