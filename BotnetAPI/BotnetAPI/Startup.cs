@@ -42,7 +42,7 @@ namespace BotnetAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(options => options.WithOrigins("http://localhost:3000").AllowAnyMethod());
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseHttpsRedirection();
 

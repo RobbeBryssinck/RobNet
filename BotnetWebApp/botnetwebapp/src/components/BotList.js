@@ -4,6 +4,7 @@ import Bot from "./Bot";
 import AddBotForm from "./AddBotForm";
 
 const BotsUri = "https://localhost:44343/api/Bots/";
+const ExploitsUri = "https://localhost:44343/api/Exploits/";
 
 function BotList() {
   const [botList, setBotList] = useState([]);
@@ -12,20 +13,26 @@ function BotList() {
     axios.get(BotsUri).then((res) => {
       const newBotList = res.data;
       setBotList(newBotList);
-      console.log(newBotList);
     });
   }, []);
 
   const addBot = (ip) => {
+    /*
     const newBot = {
       id: 5,
       ip: ip,
       platform: "Mac OS",
       status: "Online",
     };
+    */
 
-    const newBotList = [...botList, newBot];
-    setBotList(newBotList);
+    const exploit = { ip: ip };
+
+    axios.post(ExploitsUri, exploit).then((res) => {
+      const newBot = res.data;
+      const newBotList = [...botList, newBot];
+      setBotList(newBotList);
+    });
   };
 
   return (
