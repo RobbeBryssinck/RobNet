@@ -1,31 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Bot from "./Bot";
-import AddBot from "./AddBotForm";
+import AddBotForm from "./AddBotForm";
+
+const BotsUri = "https://localhost:44343/api/Bots/";
 
 function BotList() {
-  const [botList, setBotList] = useState([
-    {
-      id: 1,
-      ip: "192.168.0.120",
-      platform: "Linux",
-      status: "Online",
-      tasks: "None",
-    },
-    {
-      id: 2,
-      ip: "192.168.0.121",
-      platform: "Windows",
-      status: "Offline",
-      tasks: "None",
-    },
-    {
-      id: 3,
-      ip: "192.168.0.122",
-      platform: "Linux",
-      status: "Online",
-      tasks: "None",
-    },
-  ]);
+  const [botList, setBotList] = useState([]);
+
+  useEffect(() => {
+    axios.get(BotsUri).then((res) => {
+      const newBotList = res.data;
+      setBotList(newBotList);
+      console.log(newBotList);
+    });
+  }, []);
 
   const addBot = (ip) => {
     const newBot = {
@@ -33,10 +22,9 @@ function BotList() {
       ip: ip,
       platform: "Mac OS",
       status: "Online",
-      tasks: "None",
     };
+
     const newBotList = [...botList, newBot];
-    console.log(newBotList);
     setBotList(newBotList);
   };
 
@@ -49,7 +37,6 @@ function BotList() {
             <th>IP address</th>
             <th>Platform</th>
             <th>Status</th>
-            <th>Current tasks</th>
             <th>Commands</th>
             <th>SSH</th>
             <th>Remove</th>
@@ -61,7 +48,7 @@ function BotList() {
           ))}
         </tbody>
       </table>
-      <AddBot addBot={addBot} />
+      <AddBotForm addBot={addBot} />
     </div>
   );
 }

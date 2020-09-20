@@ -30,6 +30,8 @@ namespace BotnetAPI
             services.AddDbContext<BotnetContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BotnetAPIDB")));
             services.AddControllers();
+            // NOTE: Re-enable CORS when deploying
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +41,8 @@ namespace BotnetAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(options => options.WithOrigins("http://localhost:3000").AllowAnyMethod());
 
             app.UseHttpsRedirection();
 

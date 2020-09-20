@@ -7,7 +7,6 @@ function Bot({ bot }) {
       <td>{bot.ip}</td>
       <td>{bot.platform}</td>
       <td>{bot.status}</td>
-      <td>{bot.tasks}</td>
       <td>
         <button>Commands</button>
       </td>
