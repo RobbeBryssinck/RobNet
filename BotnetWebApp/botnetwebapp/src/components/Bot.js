@@ -11,6 +11,7 @@ function Bot({ bot, deleteBot }) {
       <td>{bot.ip}</td>
       <td>{bot.platform}</td>
       <td>{bot.status}</td>
+      <td>{bot.sshName}</td>
       <td>
         <button>Commands</button>
       </td>

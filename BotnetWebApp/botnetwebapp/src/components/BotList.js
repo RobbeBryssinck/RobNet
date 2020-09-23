@@ -44,6 +44,7 @@ function BotList() {
             <th>IP address</th>
             <th>Platform</th>
             <th>Status</th>
+            <th>SSH name</th>
             <th>Commands</th>
             <th>SSH</th>
             <th>Remove</th>
