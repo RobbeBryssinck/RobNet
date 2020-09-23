@@ -17,20 +17,20 @@ function BotList() {
   }, []);
 
   const addBot = (ip) => {
-    /*
-    const newBot = {
-      id: 5,
-      ip: ip,
-      platform: "Mac OS",
-      status: "Online",
-    };
-    */
-
     const exploit = { ip: ip };
 
     axios.post(ExploitsUri, exploit).then((res) => {
       const newBot = res.data;
       const newBotList = [...botList, newBot];
+      setBotList(newBotList);
+    });
+  };
+
+  const deleteBot = (bot) => {
+    const id = bot.id;
+
+    axios.delete(BotsUri + id).then(() => {
+      const newBotList = botList.filter((filterBot) => filterBot.id !== bot.id);
       setBotList(newBotList);
     });
   };
@@ -51,7 +51,7 @@ function BotList() {
         </thead>
         <tbody>
           {botList.map((bot) => (
-            <Bot key={bot.id} bot={bot} />
+            <Bot key={bot.id} bot={bot} deleteBot={deleteBot} />
           ))}
         </tbody>
       </table>

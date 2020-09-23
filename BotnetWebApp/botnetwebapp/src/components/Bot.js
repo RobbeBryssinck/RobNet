@@ -1,6 +1,10 @@
 import React from "react";
 
-function Bot({ bot }) {
+function Bot({ bot, deleteBot }) {
+  const handleDelete = () => {
+    deleteBot(bot);
+  };
+
   return (
     <tr>
       <td>{bot.id}</td>
@@ -14,7 +18,7 @@ function Bot({ bot }) {
         <button>SSH</button>
       </td>
       <td>
-        <button>Delete?</button>
+        <button onClick={handleDelete}>Delete?</button>
       </td>
     </tr>
   );
