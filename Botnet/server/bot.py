@@ -1,7 +1,8 @@
 class Bot():
-    def __init__(self, address, socket):
+    def __init__(self, address, bot_socket, user_id):
         self.address = address
-        self.socket = socket
+        self.bot_socket = bot_socket
+        self.user_id = user_id
 
     def execute_command(self, command):
         """
