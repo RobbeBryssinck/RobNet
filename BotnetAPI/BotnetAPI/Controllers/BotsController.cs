@@ -42,8 +42,6 @@ namespace BotnetAPI.Controllers
         }
 
         // PUT: api/Bots/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBot(int id, Bot bot)
         {
@@ -74,11 +72,17 @@ namespace BotnetAPI.Controllers
         }
 
         // POST: api/Bots
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Bot>> PostBot(Bot bot)
+        public async Task<ActionResult<BotDTO>> PostBot(BotDTO botDTO)
         {
+            var bot = new Bot
+            {
+                IP = botDTO.IP,
+                SSHName = botDTO.SSHName,
+                Platform = botDTO.Platform,
+                Status = null
+            };
+
             _context.Bots.Add(bot);
             await _context.SaveChangesAsync();
 
@@ -105,5 +109,15 @@ namespace BotnetAPI.Controllers
         {
             return _context.Bots.Any(e => e.Id == id);
         }
+
+        private static BotDTO BotToDTO(Bot bot) =>
+            new BotDTO
+            {
+                Id = bot.Id,
+                IP = bot.IP,
+                SSHName = bot.SSHName,
+                Platform = bot.Platform,
+                Status = bot.Status
+            };
     }
 }

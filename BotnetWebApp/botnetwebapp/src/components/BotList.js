@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Bot from "./Bot";
+import ExploitMachineForm from "./ExploitMachineForm";
 import AddBotForm from "./AddBotForm";
 
 const BotsUri = "https://localhost:44343/api/Bots/";
@@ -16,10 +17,18 @@ function BotList() {
     });
   }, []);
 
-  const addBot = (ip) => {
-    const exploit = { ip: ip };
+  const addBot = (bot) => {
+    axios.post(ExploitsUri, bot).then((res) => {
+      const newBot = res.data;
+      const newBotList = [...botList, newBot];
+      setBotList(newBotList);
+    });
+  };
 
-    axios.post(ExploitsUri, exploit).then((res) => {
+  const exploitMachine = (ip) => {
+    const machine = { ip: ip };
+
+    axios.post(ExploitsUri, machine).then((res) => {
       const newBot = res.data;
       const newBotList = [...botList, newBot];
       setBotList(newBotList);
@@ -56,6 +65,7 @@ function BotList() {
           ))}
         </tbody>
       </table>
+      <ExploitMachineForm exploitMachine={exploitMachine} />
       <AddBotForm addBot={addBot} />
     </div>
   );

@@ -1,6 +1,6 @@
 ﻿namespace BotnetAPI.Models
 {
-    public class Bot
+    public class BotDTO
     {
         public int Id { get; set; }
         public string IP { get; set; }
