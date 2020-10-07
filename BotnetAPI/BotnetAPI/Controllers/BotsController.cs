@@ -77,6 +77,7 @@ namespace BotnetAPI.Controllers
         {
             var bot = new Bot
             {
+                UserId = "1",
                 IP = botDTO.IP,
                 SSHName = botDTO.SSHName,
                 Platform = botDTO.Platform,
@@ -114,6 +115,7 @@ namespace BotnetAPI.Controllers
             new BotDTO
             {
                 Id = bot.Id,
+                UserId = bot.UserId,
                 IP = bot.IP,
                 SSHName = bot.SSHName,
                 Platform = bot.Platform,
