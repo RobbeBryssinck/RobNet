@@ -3,7 +3,7 @@ import socket
 
 @dataclass
 class Command:
+    command_socket: socket
     commandId: int
     commandDescription: str
     userId: int
-    command_socket: socket
