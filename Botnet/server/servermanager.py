@@ -19,7 +19,7 @@ class ServerManager():
 
 
     def get_connection_string(self, database):
-        f = open("databaseconfig.json", r)
+        f = open("databaseconfig.json", 'r')
         config = json.load(f)
 
         driver = "{ODBC Driver 17 for SQL Server}"
@@ -48,12 +48,12 @@ class ServerManager():
         return response
 
 
-    def listen_for_bots(self, bot_entry_address):
+    def listen_for_bots(self, ip, port):
         """
         Listen for incoming bots
         :return: None
         """
-        bots_socket = self.create_listen_socket(bot_entry_address)
+        bots_socket = self.create_listen_socket((ip, port))
 
         while True:
             try:
