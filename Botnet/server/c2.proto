@@ -21,7 +21,7 @@ message StartJobResponse {
 }
 
 message Bot {
-    int32 userId = 1;
+    string userId = 1;
     enum State {
         OFFLINE = 0;
         WAITING = 1;
