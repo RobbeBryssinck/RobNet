@@ -36,6 +36,26 @@ class ServerManager():
         Listen for incoming commands
         :return: None
         """
+        commands_socket = self.create_socket(self.command_entry_address)
+
+        while True:
+            try:
+                command_socket, command_address = commands_socket.accept()
+            except:
+                print("[-] Accepting command connection failed")
+                break
+
+            if command_address[0] != self.trusted_api:
+                command_socket.sendall(b'Permission denied.')
+                command_socket.shutdown()
+                command_socket.close()
+                break
+
+    def listen_for_commands(self):
+        """
+        Listen for incoming commands
+        :return: None
+        """
         command_socket = self.create_socket(self.command_entry_address)
 
         while True:
