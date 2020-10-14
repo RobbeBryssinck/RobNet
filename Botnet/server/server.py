@@ -12,8 +12,7 @@ class C2Servicer(c2_pb2_grpc.C2Servicer):
         self.server_manager = servermanager.ServerManager()
 
     def StartJob(self, request, context):
-        response.response = self.server_manager.start_job(request)
-        return response
+        return self.server_manager.start_job(request)
 
 if __name__ == "__main__":
     server = grpc.server(futures.ThreadPoolExecutor(max_workes=10))

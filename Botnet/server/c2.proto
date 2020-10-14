@@ -21,12 +21,14 @@ message StartJobResponse {
 }
 
 message Bot {
-    int32 botId = 1;
+    int32 userId = 1;
     enum State {
-        ONLINE = 0;
-        OFFLINE = 1;
+        OFFLINE = 0;
+        WAITING = 1;
+        WORKING = 2;
     }
     State state = 2;
+    string address = 3;
 }
 
 message GetJobRequest {

