@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option csharp_namespace = "BotnetAPI";
+
+service C2 {
+    rpc StartJob(StartJobRequest) returns (StartJobResponse) {}
+    rpc GetJob(GetJobRequest) returns (Job) {}
+    rpc StopJob(StopJobRequest) returns (StopJobResponse) {}
+}
+
+message StartJobRequest {
+    int32 commandId = 1;
+    string userId = 2;
+}
+
+message StartJobResponse {
+    enum Response {
+        SUCCESS = 0;
+        FAIL = 1;
+    }
+    Response response = 1;
+    repeated BotData bots = 2;
+}
+
+message BotData {
+    string userId = 1;
+    enum State {
+        OFFLINE = 0;
+        WAITING = 1;
+        WORKING = 2;
+    }
+    State state = 2;
+    string address = 3;
+}
+
+message GetJobRequest {
+    string userId = 1;
+}
+
+message Job {
+    int32 jobId = 1;
+    int32 commandId = 2;
+    string userId = 3;
+    enum State {
+        STARTING = 0;
+        RUNNING = 1;
+        FINISHED = 2;
+    }
+    State state = 4;
+}
+
+message StopJobRequest {
+    string userId = 1;
+}
+
+message StopJobResponse {
+    enum Response {
+        SUCCESS = 0;
+        FAIL = 1;
+    }
+    Response response = 1;
+}
+
