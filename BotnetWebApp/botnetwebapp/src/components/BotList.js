@@ -11,6 +11,7 @@ function BotList() {
   const [botList, setBotList] = useState([]);
 
   useEffect(() => {
+    setBotList([])
     axios.get(BotsUri).then((res) => {
       const newBotList = res.data;
       setBotList(newBotList);

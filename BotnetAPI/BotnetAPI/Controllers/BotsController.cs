@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BotnetAPI.Models;
 using System.Net.Http;
 using Grpc.Core;
+using Grpc.Net.Client;
 
 namespace BotnetAPI.Controllers
 {
@@ -97,7 +98,7 @@ namespace BotnetAPI.Controllers
         [Route("CommandBots")]
         public async Task<ActionResult<StartJobResponse>> CommandBots(StartJobRequestDTO request)
         {
-            var channel = new Channel("192.168.175.129:4590", ChannelCredentials.Insecure);
+            using var channel = GrpcChannel.ForAddress("https://localhost:5001");
             var client = new C2.C2Client(channel);
             var response = await client.StartJobAsync(new StartJobRequest { CommandId = request.CommandId, UserId = request.UserId });
             return response;
