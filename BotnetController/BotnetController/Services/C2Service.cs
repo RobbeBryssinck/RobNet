@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BotnetAPI;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using BotnetController.Logic;
 
 namespace BotnetController
 {
@@ -18,6 +19,8 @@ namespace BotnetController
 
         public override Task<StartJobResponse> StartJob(StartJobRequest request, ServerCallContext context)
         {
+            ServerManager serverManager = new ServerManager();
+            var response = serverManager.StartJob(request);
             return Task.FromResult(new StartJobResponse
             {
                 Response = StartJobResponse.Types.Response.Fail,
