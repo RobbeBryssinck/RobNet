@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x08\x63\x32.proto\"4\n\x0fStartJobRequest\x12\x11\n\tcommandId\x18\x01 \x01(\x05\x12\x0e\n\x06userId\x18\x02 \x01(\t\"c\n\x10StartJobResponse\x12,\n\x08response\x18\x01 \x01(\x0e\x32\x1a.StartJobResponse.Response\"!\n\x08Response\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\"\x1f\n\rGetJobRequest\x12\x0e\n\x06userId\x18\x01 \x01(\t\"\x84\x01\n\x03Job\x12\r\n\x05jobId\x18\x01 \x01(\x05\x12\x11\n\tcommandId\x18\x02 \x01(\x05\x12\x0e\n\x06userId\x18\x03 \x01(\t\x12\x19\n\x05state\x18\x04 \x01(\x0e\x32\n.Job.State\"0\n\x05State\x12\x0c\n\x08STARTING\x10\x00\x12\x0b\n\x07RUNNING\x10\x01\x12\x0c\n\x08\x46INISHED\x10\x02\" \n\x0eStopJobRequest\x12\x0e\n\x06userId\x18\x01 \x01(\t\"a\n\x0fStopJobResponse\x12+\n\x08response\x18\x01 \x01(\x0e\x32\x19.StopJobResponse.Response\"!\n\x08Response\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\x32\x89\x01\n\x02\x43\x32\x12\x31\n\x08StartJob\x12\x10.StartJobRequest\x1a\x11.StartJobResponse\"\x00\x12 \n\x06GetJob\x12\x0e.GetJobRequest\x1a\x04.Job\"\x00\x12.\n\x07StopJob\x12\x0f.StopJobRequest\x1a\x10.StopJobResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x08\x63\x32.proto\"4\n\x0fStartJobRequest\x12\x11\n\tcommandId\x18\x01 \x01(\x05\x12\x0e\n\x06userId\x18\x02 \x01(\t\"{\n\x10StartJobResponse\x12,\n\x08response\x18\x01 \x01(\x0e\x32\x1a.StartJobResponse.Response\x12\x16\n\x04\x62ots\x18\x02 \x03(\x0b\x32\x08.BotData\"!\n\x08Response\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\"y\n\x07\x42otData\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x1d\n\x05state\x18\x02 \x01(\x0e\x32\x0e.BotData.State\x12\x0f\n\x07\x61\x64\x64ress\x18\x03 \x01(\t\".\n\x05State\x12\x0b\n\x07OFFLINE\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\x0b\n\x07WORKING\x10\x02\"\x1f\n\rGetJobRequest\x12\x0e\n\x06userId\x18\x01 \x01(\t\"\x84\x01\n\x03Job\x12\r\n\x05jobId\x18\x01 \x01(\x05\x12\x11\n\tcommandId\x18\x02 \x01(\x05\x12\x0e\n\x06userId\x18\x03 \x01(\t\x12\x19\n\x05state\x18\x04 \x01(\x0e\x32\n.Job.State\"0\n\x05State\x12\x0c\n\x08STARTING\x10\x00\x12\x0b\n\x07RUNNING\x10\x01\x12\x0c\n\x08\x46INISHED\x10\x02\" \n\x0eStopJobRequest\x12\x0e\n\x06userId\x18\x01 \x01(\t\"a\n\x0fStopJobResponse\x12+\n\x08response\x18\x01 \x01(\x0e\x32\x19.StopJobResponse.Response\"!\n\x08Response\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\x32\x89\x01\n\x02\x43\x32\x12\x31\n\x08StartJob\x12\x10.StartJobRequest\x1a\x11.StartJobResponse\"\x00\x12 \n\x06GetJob\x12\x0e.GetJobRequest\x1a\x04.Job\"\x00\x12.\n\x07StopJob\x12\x0f.StopJobRequest\x1a\x10.StopJobResponse\"\x00\x62\x06proto3'
 )
 
 
@@ -44,10 +44,40 @@ _STARTJOBRESPONSE_RESPONSE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=132,
-  serialized_end=165,
+  serialized_start=156,
+  serialized_end=189,
 )
 _sym_db.RegisterEnumDescriptor(_STARTJOBRESPONSE_RESPONSE)
+
+_BOTDATA_STATE = _descriptor.EnumDescriptor(
+  name='State',
+  full_name='BotData.State',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='OFFLINE', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='WAITING', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='WORKING', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=266,
+  serialized_end=312,
+)
+_sym_db.RegisterEnumDescriptor(_BOTDATA_STATE)
 
 _JOB_STATE = _descriptor.EnumDescriptor(
   name='State',
@@ -74,8 +104,8 @@ _JOB_STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=285,
-  serialized_end=333,
+  serialized_start=432,
+  serialized_end=480,
 )
 _sym_db.RegisterEnumDescriptor(_JOB_STATE)
 
@@ -99,8 +129,8 @@ _STOPJOBRESPONSE_RESPONSE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=132,
-  serialized_end=165,
+  serialized_start=156,
+  serialized_end=189,
 )
 _sym_db.RegisterEnumDescriptor(_STOPJOBRESPONSE_RESPONSE)
 
@@ -159,6 +189,13 @@ _STARTJOBRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='bots', full_name='StartJobResponse.bots', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -173,7 +210,54 @@ _STARTJOBRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=66,
-  serialized_end=165,
+  serialized_end=189,
+)
+
+
+_BOTDATA = _descriptor.Descriptor(
+  name='BotData',
+  full_name='BotData',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='userId', full_name='BotData.userId', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='state', full_name='BotData.state', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='address', full_name='BotData.address', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _BOTDATA_STATE,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=191,
+  serialized_end=312,
 )
 
 
@@ -204,8 +288,8 @@ _GETJOBREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=167,
-  serialized_end=198,
+  serialized_start=314,
+  serialized_end=345,
 )
 
 
@@ -258,8 +342,8 @@ _JOB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=201,
-  serialized_end=333,
+  serialized_start=348,
+  serialized_end=480,
 )
 
 
@@ -290,8 +374,8 @@ _STOPJOBREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=335,
-  serialized_end=367,
+  serialized_start=482,
+  serialized_end=514,
 )
 
 
@@ -323,18 +407,22 @@ _STOPJOBRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=369,
-  serialized_end=466,
+  serialized_start=516,
+  serialized_end=613,
 )
 
 _STARTJOBRESPONSE.fields_by_name['response'].enum_type = _STARTJOBRESPONSE_RESPONSE
+_STARTJOBRESPONSE.fields_by_name['bots'].message_type = _BOTDATA
 _STARTJOBRESPONSE_RESPONSE.containing_type = _STARTJOBRESPONSE
+_BOTDATA.fields_by_name['state'].enum_type = _BOTDATA_STATE
+_BOTDATA_STATE.containing_type = _BOTDATA
 _JOB.fields_by_name['state'].enum_type = _JOB_STATE
 _JOB_STATE.containing_type = _JOB
 _STOPJOBRESPONSE.fields_by_name['response'].enum_type = _STOPJOBRESPONSE_RESPONSE
 _STOPJOBRESPONSE_RESPONSE.containing_type = _STOPJOBRESPONSE
 DESCRIPTOR.message_types_by_name['StartJobRequest'] = _STARTJOBREQUEST
 DESCRIPTOR.message_types_by_name['StartJobResponse'] = _STARTJOBRESPONSE
+DESCRIPTOR.message_types_by_name['BotData'] = _BOTDATA
 DESCRIPTOR.message_types_by_name['GetJobRequest'] = _GETJOBREQUEST
 DESCRIPTOR.message_types_by_name['Job'] = _JOB
 DESCRIPTOR.message_types_by_name['StopJobRequest'] = _STOPJOBREQUEST
@@ -354,6 +442,13 @@ StartJobResponse = _reflection.GeneratedProtocolMessageType('StartJobResponse', 
   # @@protoc_insertion_point(class_scope:StartJobResponse)
   })
 _sym_db.RegisterMessage(StartJobResponse)
+
+BotData = _reflection.GeneratedProtocolMessageType('BotData', (_message.Message,), {
+  'DESCRIPTOR' : _BOTDATA,
+  '__module__' : 'c2_pb2'
+  # @@protoc_insertion_point(class_scope:BotData)
+  })
+_sym_db.RegisterMessage(BotData)
 
 GetJobRequest = _reflection.GeneratedProtocolMessageType('GetJobRequest', (_message.Message,), {
   'DESCRIPTOR' : _GETJOBREQUEST,
@@ -392,8 +487,8 @@ _C2 = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=469,
-  serialized_end=606,
+  serialized_start=616,
+  serialized_end=753,
   methods=[
   _descriptor.MethodDescriptor(
     name='StartJob',

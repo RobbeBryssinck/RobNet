@@ -17,10 +17,10 @@ message StartJobResponse {
         FAIL = 1;
     }
     Response response = 1;
-    repeated Bot bots = 2;
+    repeated BotData bots = 2;
 }
 
-message Bot {
+message BotData {
     string userId = 1;
     enum State {
         OFFLINE = 0;

