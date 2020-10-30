@@ -26,6 +26,12 @@ namespace BotnetJobAPI.Controllers.v1
             _mediator = mediator;
         }
 
+        /// <summary>  
+        /// Action to create a new botnet job in the database.  
+        /// </summary>  
+        /// <param name="createBotnetJobModel">Model to create a new botnet job</param>  
+        /// <returns>Returns the created botnet job</returns> 
+        [HttpPost]
         public async Task<ActionResult<BotnetJob>> BotnetJob([FromBody] CreateBotnetJobModel createBotnetJobModel)
         {
             try
@@ -41,6 +47,7 @@ namespace BotnetJobAPI.Controllers.v1
             }
         }
 
+        [HttpPut]
         public async Task<ActionResult<BotnetJob>> BotnetJob([FromBody] UpdateBotnetJobModel updateBotnetJobModel)
         {
             try

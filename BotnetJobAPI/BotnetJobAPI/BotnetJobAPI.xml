@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BotnetJobAPI</name>
+    </assembly>
+    <members>
+        <member name="M:BotnetJobAPI.Controllers.v1.BotnetJobController.BotnetJob(BotnetJobAPI.Models.v1.CreateBotnetJobModel)">
+            <summary>  
+            Action to create a new botnet job in the database.  
+            </summary>  
+            <param name="createBotnetJobModel">Model to create a new botnet job</param>  
+            <returns>Returns the created botnet job</returns> 
+        </member>
+    </members>
+</doc>

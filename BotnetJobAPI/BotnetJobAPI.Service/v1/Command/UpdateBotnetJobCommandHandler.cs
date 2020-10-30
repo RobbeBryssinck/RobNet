@@ -22,7 +22,7 @@ namespace BotnetJobAPI.Service.v1.Command
         {
             var botnetJob = await _botnetJobRepository.UpdateAsync(request.BotnetJob);
 
-            _botnetJobUpdateSender.SendBotnetJob(botnetJob);
+            //_botnetJobUpdateSender.SendBotnetJob(botnetJob);
 
             return botnetJob;
         }
