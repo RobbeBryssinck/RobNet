@@ -25,7 +25,7 @@ namespace BotnetAPI.Controllers
 
         // GET: api/Bots
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bot>>> GetBots()
+        public async Task<ActionResult<IEnumerable<Bot>>> GetBots(string userId)
         {
             return await _context.Bots.ToListAsync();
         }
@@ -42,6 +42,13 @@ namespace BotnetAPI.Controllers
             }
 
             return bot;
+        }
+
+        [HttpGet("{id}")]
+        [Route("ByBotnetId")]
+        public async Task<ActionResult<IEnumerable<Bot>>> ByBotnetId(int botnetId)
+        {
+            return await _context.Bots.Where(x => x.BotnetId == botnetId).ToListAsync();
         }
 
         // PUT: api/Bots/5

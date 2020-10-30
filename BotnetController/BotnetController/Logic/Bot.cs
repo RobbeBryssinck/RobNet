@@ -1,4 +1,4 @@
-﻿namespace BotnetAPI.Models
+﻿namespace BotnetController.Logic
 {
     public class Bot
     {

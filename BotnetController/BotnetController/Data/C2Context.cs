@@ -9,12 +9,12 @@ namespace BotnetController.Data
         {
         }
 
-        public DbSet<C2Server> C2Servers { get; set; }
+        public DbSet<C2Job> C2Jobs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<C2Server>().ToTable("C2Server");
+            modelBuilder.Entity<C2Job>().ToTable("C2Job");
         }
     }
 }

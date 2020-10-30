@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "BotnetAPI";
+option csharp_namespace = "BotnetController";
 
 service C2 {
     rpc StartJob(StartJobRequest) returns (StartJobResponse) {}
@@ -11,6 +11,7 @@ service C2 {
 message StartJobRequest {
     int32 commandId = 1;
     string userId = 2;
+    int32 botnetId = 3;
 }
 
 message StartJobResponse {
