@@ -37,21 +37,23 @@ namespace Bots.API.Controllers
             return Ok(bots);
         }
 
-        // GET: api/Bots/5
-        /*
         [HttpGet("{id}")]
-        public async Task<ActionResult<Bot>> GetBot(int id)
+        [Route("bot/{id:int}")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Bot), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Bot>> BotByIdAsync(int id)
         {
-            var bot = await _context.Bots.FindAsync(id);
+            if (id <= 0)
+                return BadRequest();
 
-            if (bot == null)
-            {
-                return NotFound();
-            }
+            var bot = await _context.Bots.SingleOrDefaultAsync(b => b.Id == id);
 
-            return bot;
+            if (bot != null)
+                return bot;
+
+            return NotFound();
         }
-        */
 
         // PUT: api/Bots/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -89,12 +91,12 @@ namespace Bots.API.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Bot>> PostBot(Bot bot)
+        public async Task<ActionResult<Bot>> PostBot([FromBody]Bot bot)
         {
             _context.Bots.Add(bot);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBot", new { id = bot.Id }, bot);
+            return CreatedAtAction(nameof(BotByIdAsync), new { id = bot.Id }, bot);
         }
 
         // DELETE: api/Bots/5
