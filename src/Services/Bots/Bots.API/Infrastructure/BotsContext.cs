@@ -19,7 +19,6 @@ namespace Bots.API.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Entity<Bot>().HasOne(x => x.Botnet).WithMany(x => x.Bots).HasForeignKey(x => x.BotnetId);
         }
     }
 }
