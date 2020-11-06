@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BotnetJobs.Data\BotnetJobs.Data.csproj" />
-    <ProjectReference Include="..\BotnetJobs.Domain\BotnetJobs.Domain.csproj" />
     <ProjectReference Include="..\BotnetJobs.Messaging.Send\BotnetJobs.Messaging.Send.csproj" />
   </ItemGroup>
 

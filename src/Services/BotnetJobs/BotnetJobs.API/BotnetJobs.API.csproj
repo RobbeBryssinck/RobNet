@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Users\Robbe\source\repos\RobNet\BotnetJobAPI\BotnetJobAPI\BotnetJobAPI.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\Robbe\source\repos\RobNet\src\Services\BotnetJobs\BotnetJobs.API\BotnetJobs.API.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Users\Robbe\source\repos\RobNet\BotnetJobAPI\BotnetJobAPI\BotnetJobAPI.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\Robbe\source\repos\RobNet\src\Services\BotnetJobs\BotnetJobs.API\BotnetJobs.API.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 

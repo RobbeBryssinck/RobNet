@@ -6,6 +6,6 @@ namespace BotnetJobs.Service.v1.Query
 {
     public class GetBotnetJobByIdQuery : IRequest<BotnetJob>
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }
