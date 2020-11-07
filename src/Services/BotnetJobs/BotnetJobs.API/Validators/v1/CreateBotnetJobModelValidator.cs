@@ -9,12 +9,16 @@ namespace BotnetJobs.API.Validators.v1
         {
             RuleFor(x => x.BotnetId)
                 .NotNull()
-                .WithMessage("The command id can not be empty");
+                .WithMessage("The botnet id can not be empty");
 
             // TODO: Add check for valid command id
             RuleFor(x => x.CommandId)
                 .NotNull()
                 .WithMessage("The command id can not be empty");
+
+            RuleFor(x => x.Status)
+                .NotNull()
+                .WithMessage("The status can not be empty");
         }
     }
 }
