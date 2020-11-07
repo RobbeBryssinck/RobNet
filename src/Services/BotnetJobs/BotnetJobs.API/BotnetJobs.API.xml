@@ -4,6 +4,13 @@
         <name>BotnetJobs.API</name>
     </assembly>
     <members>
+        <member name="M:BotnetJobs.API.Controllers.v1.BotnetJobController.GetBotnetJobByBotnetIdAsync(System.Int32)">
+            <summary>
+            Action to get a botnet job by BotnetId.
+            </summary>
+            <param name="botnetId">Id of the botnet</param>
+            <returns>The botnet job mapped to BotnetId</returns>
+        </member>
         <member name="M:BotnetJobs.API.Controllers.v1.BotnetJobController.BotnetJob(BotnetJobs.API.Models.v1.CreateBotnetJobModel)">
             <summary>  
             Action to create a new botnet job in the database.  

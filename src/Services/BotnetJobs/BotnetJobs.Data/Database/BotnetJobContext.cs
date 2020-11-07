@@ -9,7 +9,7 @@ namespace BotnetJobs.Data.Database
         {
         }
 
-        public DbSet<BotnetJob> BotnetJob { get; set; }
+        public DbSet<BotnetJob> BotnetJobs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

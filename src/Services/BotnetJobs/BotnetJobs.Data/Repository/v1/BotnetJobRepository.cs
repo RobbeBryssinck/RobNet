@@ -15,12 +15,12 @@ namespace BotnetJobs.Data.Repository.v1
 
         public async Task<BotnetJob> GetBotnetJobByIdAsync(int id, CancellationToken cancellationToken)
         {
-            return await _context.BotnetJob.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await _context.BotnetJobs.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task<BotnetJob> GetBotnetJobByBotnetIdAsync(int botnetId, CancellationToken cancellationToken)
         {
-            return await _context.BotnetJob.FirstOrDefaultAsync(x => x.BotnetId == botnetId, cancellationToken);
+            return await _context.BotnetJobs.FirstOrDefaultAsync(x => x.BotnetId == botnetId, cancellationToken);
         }
     }
 }
