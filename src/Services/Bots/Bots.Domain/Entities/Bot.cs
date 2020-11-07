@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Bots.API.Models
+﻿namespace Bots.Domain.Entities
 {
     public class Bot
     {
-        [Key]
         public int Id { get; set; }
         public string IP { get; set; }
         public string SSHName { get; set; }

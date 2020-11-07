@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Bots.API.Models
+﻿namespace Bots.Domain.Entities
 {
     public class Botnet
     {

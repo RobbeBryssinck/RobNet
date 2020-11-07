@@ -26,7 +26,7 @@ namespace Bots.API.Controllers
         // GET api/Bots/5[?pageSize=5&pageIndex=2]
         [HttpGet("{botnetId}")]
         [ProducesResponseType(typeof(IEnumerable<Bot>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetBotsAsync(int botnetId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> BotsAsync(int botnetId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
             var botlist = await _context.Bots.Where(x => x.BotnetId == botnetId).ToListAsync();
 

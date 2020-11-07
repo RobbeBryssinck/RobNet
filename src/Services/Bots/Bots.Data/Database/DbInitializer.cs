@@ -1,10 +1,7 @@
-﻿using Bots.API.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using Bots.Domain.Entities;
 
-namespace Bots.API.Infrastructure
+namespace Bots.Data.Database
 {
     public class DbInitializer
     {
