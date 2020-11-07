@@ -91,6 +91,7 @@ namespace BotnetJobs.API
             services.AddTransient<IRequestHandler<CreateBotnetJobCommand, BotnetJob>, CreateBotnetJobCommandHandler>();
             services.AddTransient<IRequestHandler<UpdateBotnetJobCommand, BotnetJob>, UpdateBotnetJobCommandHandler>();
             services.AddTransient<IRequestHandler<GetBotnetJobByIdQuery, BotnetJob>, GetBotnetJobByIdQueryHandler>();
+            services.AddTransient<IRequestHandler<GetBotnetJobByBotnetIdQuery, BotnetJob>, GetBotnetJobByBotnetIdQueryHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

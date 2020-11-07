@@ -24,6 +24,34 @@ namespace BotnetJobs.API.Controllers.v1
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Action to get a botnet job by BotnetId.
+        /// </summary>
+        /// <param name="botnetId">Id of the botnet</param>
+        /// <returns>The botnet job mapped to BotnetId</returns>
+        [HttpGet("{botnetId}")]
+        public async Task<ActionResult<BotnetJob>> GetBotnetJobByBotnetIdAsync(int botnetId)
+        {
+            try
+            {
+                var botnetJob = await _mediator.Send(new GetBotnetJobByBotnetIdQuery
+                {
+                    BotnetId = botnetId
+                });
+
+                if (botnetJob == null)
+                {
+                    return NotFound();
+                }
+
+                return botnetJob;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         /// <summary>  
         /// Action to create a new botnet job in the database.  
         /// </summary>  
