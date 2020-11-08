@@ -4,9 +4,9 @@ function BotnetCommands() {
   return (
     <div className="container">
       <h2>Botnet commands</h2>
-      <button className="grey-button">command 1</button>
-      <button className="grey-button">command 2</button>
-      <button className="grey-button">command 3</button>
+      <button className="grey-button">Crypto mining</button>
+      <button className="grey-button">DDoS</button>
+      <button className="grey-button">File sort</button>
     </div>
   );
 }
