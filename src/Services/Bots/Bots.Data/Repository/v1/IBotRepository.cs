@@ -9,6 +9,6 @@ namespace Bots.Data.Repository.v1
     {
         Task<Bot> GetBotByIdAsync(int id, CancellationToken cancellationToken);
 
-        Task<List<Bot>> GetBotsByBotnetIdAsync(int botnetId, CancellationToken cancellationToken);
+        Task<List<Bot>> GetBotsByBotnetIdAsync(int botnetId, int pageSize, int pageIndex, CancellationToken cancellationToken);
     }
 }

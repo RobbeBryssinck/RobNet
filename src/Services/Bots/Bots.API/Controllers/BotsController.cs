@@ -5,36 +5,49 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Bots.API.Infrastructure;
-using Bots.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
+using AutoMapper;
+using Bots.Data.Database;
+using Bots.Domain.Entities;
+using Bots.Service.Command;
+using Bots.Service.Query;
+using MediatR;
 
 namespace Bots.API.Controllers
 {
+    [Produces("application/json")]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class BotsController : ControllerBase
     {
-        private readonly BotsContext _context;
+        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public BotsController(BotsContext context)
+        public BotsController(IMapper mapper, IMediator mediator)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mapper = mapper;
+            _mediator = mediator;
         }
 
         // GET api/Bots/5[?pageSize=5&pageIndex=2]
         [HttpGet("{botnetId}")]
-        [ProducesResponseType(typeof(IEnumerable<Bot>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> BotsAsync(int botnetId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<Bot>>> BotsAsync(int botnetId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            var botlist = await _context.Bots.Where(x => x.BotnetId == botnetId).ToListAsync();
-
-            var bots = botlist
-                .Skip(pageSize * pageIndex)
-                .Take(pageSize);
-
-            return Ok(bots);
+            try
+            {
+                return await _mediator.Send(new GetBotsByBotnetIdSlicedQuery
+                {
+                    BotnetId = botnetId,
+                    PageSize = pageSize,
+                    PageIndex = pageIndex
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -47,7 +60,10 @@ namespace Bots.API.Controllers
             if (id <= 0)
                 return BadRequest();
 
-            var bot = await _context.Bots.SingleOrDefaultAsync(b => b.Id == id);
+            var bot = await _mediator.Send(new GetBotByIdQuery
+            {
+                Id = id
+            });
 
             if (bot != null)
                 return bot;
@@ -56,68 +72,74 @@ namespace Bots.API.Controllers
         }
 
         // PUT: api/Bots/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBot(int id, Bot bot)
+        public async Task<ActionResult<Bot>> PutBot(int id, [FromBody]Bot updatedBot)
         {
-            if (id != bot.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(bot).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BotExists(id))
+                var bot = await _mediator.Send(new GetBotByIdQuery
+                {
+                    Id = id
+                });
+
+                if (bot == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                return await _mediator.Send(new UpdateBotCommand
+                {
+                    Bot = updatedBot
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST: api/Bots
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Bot>> PostBot([FromBody]Bot bot)
         {
-            _context.Bots.Add(bot);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(BotByIdAsync), new { id = bot.Id }, bot);
+            try
+            {
+                return await _mediator.Send(new CreateBotCommand
+                {
+                    Bot = bot
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Bots/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Bot>> DeleteBot(int id)
         {
-            var bot = await _context.Bots.FindAsync(id);
-            if (bot == null)
+            try
             {
-                return NotFound();
+                var bot = await _mediator.Send(new GetBotByIdQuery
+                {
+                    Id = id
+                });
+
+                if (bot == null)
+                {
+                    return NotFound();
+                }
+
+                return await _mediator.Send(new DeleteBotCommand
+                {
+                    Bot = bot
+                });
             }
-
-            _context.Bots.Remove(bot);
-            await _context.SaveChangesAsync();
-
-            return bot;
-        }
-
-        private bool BotExists(int id)
-        {
-            return _context.Bots.Any(e => e.Id == id);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

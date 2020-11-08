@@ -21,9 +21,13 @@ namespace Bots.Data.Repository.v1
             return await _context.Bots.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task<List<Bot>> GetBotsByBotnetIdAsync(int botnetId, CancellationToken cancellationToken)
+        public async Task<List<Bot>> GetBotsByBotnetIdAsync(int botnetId, int pageSize, int pageIndex, CancellationToken cancellationToken)
         {
-            return await _context.Bots.Where(x => x.BotnetId == botnetId).ToListAsync(cancellationToken);
+            return await _context.Bots
+                .Where(x => x.BotnetId == botnetId)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
         }
     }
 }

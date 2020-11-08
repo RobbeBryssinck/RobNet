@@ -15,5 +15,7 @@ namespace Bots.Data.Repository.v1
         Task<TEntity> UpdateAsync(TEntity entity);
 
         Task UpdateRangeAsync(List<TEntity> entities);
+
+        Task<TEntity> DeleteAsync(TEntity entity);
     }
 }

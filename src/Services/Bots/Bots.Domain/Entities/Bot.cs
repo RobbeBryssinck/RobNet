@@ -7,7 +7,6 @@
         public string SSHName { get; set; }
         public string Status { get; set; }
 
-        public Botnet Botnet { get; set; }
         public int BotnetId { get; set; }
     }
 }
