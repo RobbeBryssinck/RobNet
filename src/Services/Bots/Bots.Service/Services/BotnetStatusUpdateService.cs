@@ -22,7 +22,7 @@ namespace Bots.Service.Services
             {
                 var botnet = await _mediator.Send(new GetBotnetByIdQuery
                 {
-                    Id = updateBotnetStatusModel.Id
+                    Id = updateBotnetStatusModel.BotnetId
                 });
 
                 if (botnet != null)
@@ -30,6 +30,7 @@ namespace Bots.Service.Services
                     botnet.Status = updateBotnetStatusModel.Status;
                 }
 
+                // TODO: Is this efficient?
                 await _mediator.Send(new UpdateBotnetCommand
                 {
                     Botnet = botnet

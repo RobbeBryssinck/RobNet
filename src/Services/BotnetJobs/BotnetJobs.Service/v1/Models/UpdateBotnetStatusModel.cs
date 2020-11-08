@@ -1,8 +1,8 @@
-﻿namespace Bots.Service.Models
+﻿namespace BotnetJobs.Service.v1.Models
 {
     public class UpdateBotnetStatusModel
     {
-        public int BotnetId { get; set; }
+        public int Id { get; set; }
         public string Status { get; set; }
     }
 }
