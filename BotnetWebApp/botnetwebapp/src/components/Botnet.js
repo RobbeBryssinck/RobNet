@@ -15,9 +15,10 @@ function Botnet() {
   }, [])
 
   return (
-      <div>
-          <h1>Botnet status</h1>
-          <span>{botnet.status}</span>
+      <div className="container">
+          <h2>Botnet info</h2>
+          <b>ID: </b><span>{botnet.id} </span>
+          <b>Status: </b><span>{botnet.status} </span>
       </div>
   );
 }

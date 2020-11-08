@@ -22,7 +22,7 @@ function AddBotForm({ addBot }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} style={{ margin: "20px 0px" }}>
       <input
         type="text"
         placeholder="IP Address"

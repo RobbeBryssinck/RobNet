@@ -47,7 +47,8 @@ function BotList() {
   };
 
   return (
-    <div className="BotList">
+    <div className="BotList container">
+      <h2>Bots</h2>
       <table id="botlist-table">
         <thead>
           <tr>
@@ -56,7 +57,6 @@ function BotList() {
             <th>Platform</th>
             <th>Status</th>
             <th>SSH name</th>
-            <th>Commands</th>
             <th>SSH</th>
             <th>Remove</th>
           </tr>

@@ -13,9 +13,6 @@ function Bot({ bot, deleteBot }) {
       <td>{bot.status}</td>
       <td>{bot.sshName}</td>
       <td>
-        <button>Commands</button>
-      </td>
-      <td>
         <button>SSH</button>
       </td>
       <td>
