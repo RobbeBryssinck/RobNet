@@ -112,6 +112,8 @@ namespace Bots.API
                 app.UseHsts();
             }
 
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             app.UseHttpsRedirection();
 
             app.UseSwagger();

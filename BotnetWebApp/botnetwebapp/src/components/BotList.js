@@ -4,15 +4,16 @@ import Bot from "./Bot";
 import ExploitMachineForm from "./ExploitMachineForm";
 import AddBotForm from "./AddBotForm";
 
-const BotsUri = "https://localhost:44343/api/Bots/";
-const ExploitsUri = "https://localhost:44343/api/Exploits/";
+const BotsUri = "https://localhost:44360/api/v1/Bots/";
+const ExploitsUri = "https://localhost:44343/api/v1/Exploits/";
 
 function BotList() {
   const [botList, setBotList] = useState([]);
 
   useEffect(() => {
-    setBotList([])
-    axios.get(BotsUri).then((res) => {
+    // TODO: Why set empty array first?
+    setBotList([]);
+    axios.get(BotsUri + "1").then((res) => {
       const newBotList = res.data;
       setBotList(newBotList);
     });
