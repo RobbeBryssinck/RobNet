@@ -16,15 +16,15 @@ namespace Bots.Data.Database
             {
                 new Botnet
                 {
+                    Status = "Waiting",
+                },
+                new Botnet
+                {
+                    Status = "Waiting",
+                },
+                new Botnet
+                {
                     Status = "Working",
-                },
-                new Botnet
-                {
-                    Status = "Waiting",
-                },
-                new Botnet
-                {
-                    Status = "Waiting",
                 },
             };
 
@@ -39,6 +39,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 1,
                     IP = "253.5.74.55",
+                    Platform = "Windows",
                     SSHName = "Hank",
                     Status = "Offline",
                 },
@@ -46,6 +47,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 1,
                     IP = "55.124.22.231",
+                    Platform = "Linux",
                     SSHName = "Rachel",
                     Status = "Working",
                 },
@@ -53,6 +55,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 1,
                     IP = "55.78.92.229",
+                    Platform = "Windows",
                     SSHName = "Fred",
                     Status = "Working",
                 },
@@ -60,6 +63,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 2,
                     IP = "52.112.45.62",
+                    Platform = "Linux",
                     SSHName = "Peter",
                     Status = "Waiting",
                 },
@@ -67,6 +71,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 2,
                     IP = "82.33.34.239",
+                    Platform = "Linux",
                     SSHName = "Denise",
                     Status = "Offline",
                 },
@@ -74,6 +79,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 2,
                     IP = "52.78.63.197",
+                    Platform = "Windows",
                     SSHName = "Natalie",
                     Status = "Waiting",
                 },
@@ -81,6 +87,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 3,
                     IP = "96.128.22.47",
+                    Platform = "Windows",
                     SSHName = "Rob",
                     Status = "Waiting",
                 },
@@ -88,6 +95,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 3,
                     IP = "71.114.223.84",
+                    Platform = "Linux",
                     SSHName = "Tom",
                     Status = "Waiting",
                 },
@@ -95,6 +103,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 3,
                     IP = "34.227.32.68",
+                    Platform = "Windows",
                     SSHName = "Eliza",
                     Status = "Offline",
                 },
@@ -102,6 +111,7 @@ namespace Bots.Data.Database
                 {
                     BotnetId = 3,
                     IP = "88.123.22.293",
+                    Platform = "Linux",
                     SSHName = "Richard",
                     Status = "Waiting",
                 },
