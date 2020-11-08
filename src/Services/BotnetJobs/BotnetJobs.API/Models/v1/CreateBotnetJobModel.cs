@@ -11,6 +11,10 @@ namespace BotnetJobs.API.Models.v1
         public int CommandId { get; set; }
 
         [Required]
+        public string Command { get; set; }
+
+        [Required]
         public string Status { get; set; }
+
     }
 }

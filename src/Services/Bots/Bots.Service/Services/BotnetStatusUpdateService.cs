@@ -28,6 +28,7 @@ namespace Bots.Service.Services
                 if (botnet != null)
                 {
                     botnet.Status = updateBotnetStatusModel.Status;
+                    botnet.Command = updateBotnetStatusModel.Command;
                 }
 
                 // TODO: Is this efficient?

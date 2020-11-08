@@ -19,6 +19,10 @@ namespace BotnetJobs.API.Validators.v1
             RuleFor(x => x.Status)
                 .NotNull()
                 .WithMessage("The status can not be empty");
+
+            RuleFor(x => x.Command)
+                .NotNull()
+                .WithMessage("The command can not be empty");
         }
     }
 }

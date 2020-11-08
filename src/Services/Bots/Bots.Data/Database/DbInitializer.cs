@@ -25,6 +25,7 @@ namespace Bots.Data.Database
                 new Botnet
                 {
                     Status = "Working",
+                    Command = "Crypto mining"
                 },
             };
 
