@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
 using Bots.Data.Database;
 using Bots.Data.Repository.v1;
 using Bots.Domain.Entities;
@@ -37,7 +38,6 @@ namespace Bots.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
@@ -46,6 +46,8 @@ namespace Bots.API
 
             services.AddDbContext<BotsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BotsDB")));
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddMvc().AddFluentValidation();
 
