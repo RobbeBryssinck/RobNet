@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BotnetJobs.API.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("v1/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class BotnetJobController : ControllerBase
     {
@@ -62,9 +62,12 @@ namespace BotnetJobs.API.Controllers.v1
         {
             try
             {
+                var botnetJob = _mapper.Map<BotnetJob>(createBotnetJobModel);
+                botnetJob.JobAction = "Start";
+                botnetJob.Status = "Working";
                 return await _mediator.Send(new CreateBotnetJobCommand
                 {
-                    BotnetJob = _mapper.Map<BotnetJob>(createBotnetJobModel)
+                    BotnetJob = botnetJob
                 });
             }
             catch (Exception ex)
@@ -91,6 +94,35 @@ namespace BotnetJobs.API.Controllers.v1
                 return await _mediator.Send(new UpdateBotnetJobCommand
                 {
                     BotnetJob = _mapper.Map(updateBotnetJobModel, botnetJob)
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<BotnetJob>> DeleteBotnetJob(int id)
+        {
+            try
+            {
+                var botnetJob = await _mediator.Send(new GetBotnetJobByIdQuery
+                {
+                    Id = id
+                });
+
+                if (botnetJob == null)
+                {
+                    return NotFound();
+                }
+
+                botnetJob.JobAction = "Stop";
+                botnetJob.Status = "Waiting";
+
+                return await _mediator.Send(new DeleteBotnetJobCommand
+                {
+                    BotnetJob = botnetJob
                 });
             }
             catch (Exception ex)

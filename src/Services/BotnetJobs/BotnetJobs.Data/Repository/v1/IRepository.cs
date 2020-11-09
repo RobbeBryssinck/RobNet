@@ -10,5 +10,7 @@ namespace BotnetJobs.Data.Repository.v1
         Task<TEntity> AddAsync(TEntity entity);
 
         Task<TEntity> UpdateAsync(TEntity entity);
+
+        Task<TEntity> DeleteAsync(TEntity entity);
     }
 }

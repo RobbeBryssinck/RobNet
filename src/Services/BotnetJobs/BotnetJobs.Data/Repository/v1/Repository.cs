@@ -65,5 +65,25 @@ namespace BotnetJobs.Data.Repository.v1
                 throw new Exception($"{nameof(entity)} could not be updated: {ex.Message}");
             }
         }
+
+        public async Task<TEntity> DeleteAsync(TEntity entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
+            }
+
+            try
+            {
+                _context.Remove(entity);
+                await _context.SaveChangesAsync();
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{nameof(entity)} could not be deleted {ex.Message}");
+            }
+        }
     }
 }

