@@ -29,12 +29,6 @@ function AddBotForm({ addBot }) {
         value={ip}
         onChange={(e) => setIp(e.target.value)}
       ></input>
-      <input
-        type="text"
-        placeholder="SSH Username"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
-      ></input>
       <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
         <option value="Linux">Linux</option>
         <option value="Windows">Windows</option>

