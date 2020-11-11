@@ -2,22 +2,24 @@ import React, { useState } from "react";
 
 function AddBotForm({ addBot }) {
   const [ip, setIp] = useState("");
-  const [userName, setUserName] = useState("");
   const [platform, setPlatform] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!ip || !userName || !platform) return;
+    console.log(ip);
+    console.log(platform);
+    if (!ip || !platform) return;
 
     const bot = {
       ip: ip,
-      userName: userName,
       platform: platform,
+      status: "Waiting",
+      botnetId: 1,
     };
+    console.log("Calling...");
     addBot(bot);
 
     setIp("");
-    setUserName("");
     setPlatform("");
   };
 

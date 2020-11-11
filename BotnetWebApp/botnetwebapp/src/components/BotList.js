@@ -27,7 +27,8 @@ function BotList({ botnetStatus, botnetId }) {
   }, [botnetStatus]);
 
   const addBot = (bot) => {
-    axios.post(ExploitsUri, bot).then((res) => {
+    console.log("Posting bot");
+    axios.post(BotsUri, bot).then((res) => {
       const newBot = res.data;
       const newBotList = [...botList, newBot];
       setBotList(newBotList);
