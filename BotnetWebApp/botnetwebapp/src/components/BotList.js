@@ -3,6 +3,7 @@ import axios from "axios";
 import Bot from "./Bot";
 import ExploitMachineForm from "./ExploitMachineForm";
 import AddBotForm from "./AddBotForm";
+import useInterval from "../utils";
 
 const BotsUri = "https://localhost:44360/api/v1/Bots/";
 const ExploitsUri = "https://localhost:44343/api/v1/Exploits/";
@@ -19,15 +20,14 @@ function BotList({ botnetStatus, botnetId }) {
     });
   }, []);
 
-  useEffect(() => {
+  useInterval(() => {
     axios.get(BotsUri + botnetId).then((res) => {
       const newBotList = res.data;
       setBotList(newBotList);
     });
-  }, [botnetStatus]);
+  }, 1 * 1000);
 
   const addBot = (bot) => {
-    console.log("Posting bot");
     axios.post(BotsUri, bot).then((res) => {
       const newBot = res.data;
       const newBotList = [...botList, newBot];
@@ -74,7 +74,7 @@ function BotList({ botnetStatus, botnetId }) {
         </tbody>
       </table>
       <ExploitMachineForm exploitMachine={exploitMachine} />
-      <AddBotForm addBot={addBot} />
+      <AddBotForm addBot={addBot} botnetId={botnetId} />
     </div>
   );
 }

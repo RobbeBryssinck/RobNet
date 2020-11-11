@@ -23,13 +23,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BotnetJobs.Messaging.Send",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BotnetJobs.Service", "Services\BotnetJobs\BotnetJobs.Service\BotnetJobs.Service.csproj", "{F7BFCA40-CB43-44F9-AEF7-2DBE9FEAF681}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bots.Messaging.Receive", "Services\Bots\Bots.Messaging.Receive\Bots.Messaging.Receive.csproj", "{92B5F358-945A-4604-B386-BCDC0EB8A7FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bots.Messaging.Receive", "Services\Bots\Bots.Messaging.Receive\Bots.Messaging.Receive.csproj", "{92B5F358-945A-4604-B386-BCDC0EB8A7FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bots.Service", "Services\Bots\Bots.Service\Bots.Service.csproj", "{57E4EDE5-3810-4D66-9469-89CCA7431661}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bots.Service", "Services\Bots\Bots.Service\Bots.Service.csproj", "{57E4EDE5-3810-4D66-9469-89CCA7431661}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bots.Data", "Services\Bots\Bots.Data\Bots.Data.csproj", "{AB4C1A75-17F9-4C2B-9BC1-7AA91D5542A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bots.Data", "Services\Bots\Bots.Data\Bots.Data.csproj", "{AB4C1A75-17F9-4C2B-9BC1-7AA91D5542A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bots.Domain", "Services\Bots\Bots.Domain\Bots.Domain.csproj", "{188F4CE6-8353-4FC9-AA71-36B814A27190}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bots.Domain", "Services\Bots\Bots.Domain\Bots.Domain.csproj", "{188F4CE6-8353-4FC9-AA71-36B814A27190}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BBAC36AD-ECA2-46DC-970D-E09BE2BC58D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0FB62CE4-2E69-4D19-B555-0FA68320E4F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +99,8 @@ Global
 		{57E4EDE5-3810-4D66-9469-89CCA7431661} = {570839CE-DF67-47DE-BD6C-5559D2B5D2C0}
 		{AB4C1A75-17F9-4C2B-9BC1-7AA91D5542A8} = {570839CE-DF67-47DE-BD6C-5559D2B5D2C0}
 		{188F4CE6-8353-4FC9-AA71-36B814A27190} = {570839CE-DF67-47DE-BD6C-5559D2B5D2C0}
+		{BBAC36AD-ECA2-46DC-970D-E09BE2BC58D9} = {1BE24BFF-1620-42A4-99D5-112DE6EC5258}
+		{0FB62CE4-2E69-4D19-B555-0FA68320E4F2} = {570839CE-DF67-47DE-BD6C-5559D2B5D2C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D43A64BA-844A-4B16-B864-C7D6BDB33263}

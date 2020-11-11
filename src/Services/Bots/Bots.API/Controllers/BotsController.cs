@@ -13,6 +13,7 @@ using Bots.Domain.Entities;
 using Bots.Service.Command;
 using Bots.Service.Query;
 using MediatR;
+using Bots.API.Models.v1;
 
 namespace Bots.API.Controllers
 {
@@ -73,7 +74,7 @@ namespace Bots.API.Controllers
 
         // PUT: api/Bots/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Bot>> PutBot(int id, [FromBody]Bot updatedBot)
+        public async Task<ActionResult<Bot>> PutBot(int id, [FromBody]UpdateBotModel updateBotModel)
         {
             try
             {
@@ -89,7 +90,7 @@ namespace Bots.API.Controllers
 
                 return await _mediator.Send(new UpdateBotCommand
                 {
-                    Bot = updatedBot
+                    Bot = _mapper.Map(updateBotModel, bot)
                 });
             }
             catch (Exception ex)
@@ -100,10 +101,12 @@ namespace Bots.API.Controllers
 
         // POST: api/Bots
         [HttpPost]
-        public async Task<ActionResult<Bot>> PostBot([FromBody]Bot bot)
+        public async Task<ActionResult<Bot>> PostBot([FromBody]CreateBotModel createBotModel)
         {
             try
             {
+                var bot = _mapper.Map<Bot>(createBotModel);
+                bot.Status = "Waiting";
                 return await _mediator.Send(new CreateBotCommand
                 {
                     Bot = bot

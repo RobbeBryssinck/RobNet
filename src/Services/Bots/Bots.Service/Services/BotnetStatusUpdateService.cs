@@ -37,22 +37,22 @@ namespace Bots.Service.Services
                     Botnet = botnet
                 });
 
-                var bots = await _mediator.Send(new GetBotsByBotnetIdSlicedQuery
-                {
-                    BotnetId = botnet.Id
-                });
+                //var bots = await _mediator.Send(new GetBotsByBotnetIdSlicedQuery
+                //{
+                //    BotnetId = botnet.Id
+                //});
 
-                if (bots != null)
-                {
-                    foreach (var bot in bots)
-                    {
-                        bot.Status = updateBotnetStatusModel.Status;
-                        await _mediator.Send(new UpdateBotCommand
-                        {
-                            Bot = bot
-                        });
-                    }
-                }
+                //if (bots != null)
+                //{
+                //    foreach (var bot in bots)
+                //    {
+                //        bot.Status = updateBotnetStatusModel.Status;
+                //        await _mediator.Send(new UpdateBotCommand
+                //        {
+                //            Bot = bot
+                //        });
+                //    }
+                //}
             }
             catch (Exception ex)
             {

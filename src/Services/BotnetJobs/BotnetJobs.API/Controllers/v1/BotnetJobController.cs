@@ -88,7 +88,7 @@ namespace BotnetJobs.API.Controllers.v1
 
                 if (botnetJob == null)
                 {
-                    return BadRequest($"No botnet job found with id {updateBotnetJobModel.Id}");
+                    return NotFound();
                 }
 
                 return await _mediator.Send(new UpdateBotnetJobCommand
