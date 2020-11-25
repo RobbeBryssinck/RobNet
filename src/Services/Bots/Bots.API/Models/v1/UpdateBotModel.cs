@@ -8,7 +8,7 @@ namespace Bots.API.Models.v1
         public int Id { get; set; }
 
         [Required]
-        public string Ip { get; set; }
+        public string IP { get; set; }
 
         [Required]
         public string Platform { get; set; }

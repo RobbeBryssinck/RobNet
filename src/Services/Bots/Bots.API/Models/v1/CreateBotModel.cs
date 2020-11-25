@@ -5,7 +5,7 @@ namespace Bots.API.Models.v1
     public class CreateBotModel
     {
         [Required]
-        public int IP { get; set; }
+        public string IP { get; set; }
 
         [Required]
         public string Platform { get; set; }

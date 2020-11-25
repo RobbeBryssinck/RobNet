@@ -74,13 +74,13 @@ namespace Bots.API.Controllers
 
         // PUT: api/Bots/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Bot>> PutBot(int id, [FromBody]UpdateBotModel updateBotModel)
+        public async Task<ActionResult<Bot>> PutBot([FromBody]UpdateBotModel updateBotModel)
         {
             try
             {
                 var bot = await _mediator.Send(new GetBotByIdQuery
                 {
-                    Id = id
+                    Id = updateBotModel.Id
                 });
 
                 if (bot == null)
