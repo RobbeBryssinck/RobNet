@@ -5,6 +5,10 @@ namespace Bots.Data.Database
 {
     public class BotsContext : DbContext
     {
+        public BotsContext()
+        {
+        }
+
         public BotsContext(DbContextOptions<BotsContext> options) : base(options)
         {
         }
