@@ -12,7 +12,7 @@ namespace Bots.API
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
+            var host = CreateHostBuilder(args).Build();
 
             CreateDbIfNotExists(host);
 
@@ -47,7 +47,7 @@ namespace Bots.API
                 });
         */
 
-        public static IHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingcontext, config) =>

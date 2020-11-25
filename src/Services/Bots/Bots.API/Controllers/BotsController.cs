@@ -31,19 +31,26 @@ namespace Bots.API.Controllers
             _mediator = mediator;
         }
 
-        // GET api/Bots/5[?pageSize=5&pageIndex=2]
+        // GET api/v1/Bots/5[?pageSize=5&pageIndex=2]
         [HttpGet("{botnetId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Bot>>> BotsAsync(int botnetId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
             try
             {
-                return await _mediator.Send(new GetBotsByBotnetIdSlicedQuery
+                var bots = await _mediator.Send(new GetBotsByBotnetIdSlicedQuery
                 {
                     BotnetId = botnetId,
                     PageSize = pageSize,
                     PageIndex = pageIndex
                 });
+
+                if (bots == null || bots.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return bots;
             }
             catch (Exception ex)
             {
