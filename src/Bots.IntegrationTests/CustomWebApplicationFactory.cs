@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using Bots.Messaging.Receive.Receiver.v1;
 
 namespace Bots.IntegrationTests
 {
@@ -23,6 +24,12 @@ namespace Bots.IntegrationTests
                 if (descriptor != null)
                 {
                     services.Remove(descriptor);
+                }
+
+                var rabbitDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(BotnetStatusUpdateReceiver));
+                if (descriptor != null)
+                {
+                    services.Remove(rabbitDescriptor);
                 }
 
                 services.AddDbContext<BotsContext>((options, context) =>
