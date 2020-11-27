@@ -1,4 +1,5 @@
 ﻿using Bots.Data.Database;
+using Bots.Messaging.Receive.Receiver.v1;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using Bots.Messaging.Receive.Receiver.v1;
 
 namespace Bots.IntegrationTests
 {
@@ -26,16 +26,16 @@ namespace Bots.IntegrationTests
                     services.Remove(descriptor);
                 }
 
-                var rabbitDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(BotnetStatusUpdateReceiver));
-                if (descriptor != null)
-                {
-                    services.Remove(rabbitDescriptor);
-                }
-
                 services.AddDbContext<BotsContext>((options, context) =>
                 {
                     context.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
+
+                var d2 = services.FirstOrDefault(d => d.ImplementationType == typeof(BotnetStatusUpdateReceiver));
+                if (d2 != null)
+                {
+                    services.Remove(d2);
+                }
 
                 var sp = services.BuildServiceProvider();
 
