@@ -21,16 +21,22 @@ function AddBotForm({ addBot, botnetId }) {
 
   return (
     <form onSubmit={handleSubmit} style={{ margin: "20px 0px" }}>
-      <input
-        type="text"
-        placeholder="IP Address"
-        value={ip}
-        onChange={(e) => setIp(e.target.value)}
-      ></input>
-      <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
-        <option value="Linux">Linux</option>
-        <option value="Windows">Windows</option>
-      </select>
+      <label>
+        IP:
+        <input
+          type="text"
+          placeholder="IP Address"
+          value={ip}
+          onChange={(e) => setIp(e.target.value)}
+        ></input>
+      </label>
+      <label>
+        Platform:
+        <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
+          <option value="Linux">Linux</option>
+          <option value="Windows">Windows</option>
+        </select>
+      </label>
       <button className="grey-button">Add bot to botnet</button>
     </form>
   );

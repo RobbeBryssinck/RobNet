@@ -34,9 +34,9 @@ function Botnet() {
 
   useEffect(() => {
     if (status === "Working") {
-      setStatusColor("green");
+      setStatusColor("darkgreen");
     } else {
-      setStatusColor("red");
+      setStatusColor("darkred");
     }
   }, [status]);
 

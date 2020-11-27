@@ -20,9 +20,9 @@ function Bot({ bot, deleteBot }) {
 
 function BotStatus({ bot }) {
   if (bot.status === "Working") {
-    return <td style={{ color: "green" }}>{bot.status}</td>;
+    return <td style={{ color: "darkgreen" }}>{bot.status}</td>;
   } else {
-    return <td style={{ color: "red" }}>{bot.status}</td>;
+    return <td style={{ color: "darkred" }}>{bot.status}</td>;
   }
 }
 
