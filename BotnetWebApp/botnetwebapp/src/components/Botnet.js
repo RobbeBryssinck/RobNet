@@ -12,6 +12,7 @@ function Botnet() {
   const [id, setId] = useState(1);
   const [status, setStatus] = useState();
   const [command, setCommand] = useState();
+  const [botnetjobId, setBotnetjobId] = useState();
   const [statusColor, setStatusColor] = useState();
 
   useEffect(() => {
@@ -29,6 +30,11 @@ function Botnet() {
       setId(newBotnet.id);
       setStatus(newBotnet.status);
       setCommand(newBotnet.command);
+      if (newBotnet.status === "Working") {
+        axios.get(BotnetJobsUri + id).then((jobres) => {
+          setBotnetjobId(jobres.data.id);
+        });
+      }
     });
   }, 1 * 1000);
 
@@ -48,6 +54,14 @@ function Botnet() {
     });
   };
 
+  const cancelBotnetJob = () => {
+    axios.delete(BotnetJobsUri + botnetjobId).then((res) => {
+      setId(res.data.botnetId);
+      setStatus("Waiting");
+      setCommand(undefined);
+    });
+  };
+
   return (
     <>
       <div className="container">
@@ -58,7 +72,12 @@ function Botnet() {
         <span style={{ color: statusColor }}>{status} </span>
         <BotnetCurrentCommand status={status} command={command} />
         <br />
-        <BotnetCommands id={id} createBotnetJob={createBotnetJob} />
+        <BotnetCommands
+          id={id}
+          botnetStatus={status}
+          createBotnetJob={createBotnetJob}
+          cancelBotnetJob={cancelBotnetJob}
+        />
       </div>
       <BotList botnetStatus={status} botnetId={id} />
     </>

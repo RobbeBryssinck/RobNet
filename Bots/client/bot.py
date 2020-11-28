@@ -13,6 +13,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class Client():
     def __init__(self):
         self.bot_registration_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         self.bot_registration_address = ('192.168.0.105', 5582)
         self.commands = {1: self.command1, 2: self.command2, 3: self.command3}
         self.event_controller = threading.Event()

@@ -36,13 +36,13 @@ namespace Bots.Data.Database
 
             var bots = new Bot[]
             {
-                //new Bot
-                //{
-                //    BotnetId = 1,
-                //    IP = "192.168.175.129",
-                //    Platform = "Linux",
-                //    Status = "Waiting",
-                //},
+                new Bot
+                {
+                    BotnetId = 1,
+                    IP = "192.168.175.129",
+                    Platform = "Linux",
+                    Status = "Waiting",
+                },
                 new Bot
                 {
                     BotnetId = 1,
