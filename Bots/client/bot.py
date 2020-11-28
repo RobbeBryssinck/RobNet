@@ -81,7 +81,8 @@ class Client():
         if job_action == "Stop":
             self.stop_job()
         elif job_action == "Start":
-            # TODO: check if another command is running
+            if self.event_controller.is_set():
+                return
             command_function = self.commands[command_id]
             self.event_controller.set()
             thread = threading.Thread(target=command_function, args=(command_args,))
