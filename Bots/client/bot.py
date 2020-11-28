@@ -1,38 +1,31 @@
 import pika
 import socket
 import time
-import threading
 import json
 import sys
 import requests
 import urllib3
+import multiprocessing
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class Client():
     def __init__(self):
-        self.bot_registration_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        self.bot_registration_address = ('192.168.0.105', 5582)
         self.commands = {1: self.command1, 2: self.command2, 3: self.command3}
-        self.event_controller = threading.Event()
         self.botnet_id = 0
         self.bot_id = 0
         self.botnet_job_id = 0
         self.credentials = pika.PlainCredentials('user', 'user')
         self.parameters = pika.ConnectionParameters('192.168.0.114', 5672, '/', self.credentials)
         self.connection = pika.BlockingConnection(self.parameters)
+        self.job_process = None
 
 
     def init_check_for_jobs(self):
         url = "https://192.168.0.114:45455/api/v1/BotnetJob/" + str(self.botnet_id)
         bot_data = requests.get(url=url, verify=False)
-        print(bot_data)
-        print(self.bot_id)
-        print(url)
         if bot_data.status_code == 200:
-            print("There")
             self.execute_command(None, None, None, bot_data.json())
 
 
@@ -62,7 +55,6 @@ class Client():
 
 
     def execute_command(self, ch, method, properties, body):
-        print("[+] Got command")
 
         try:
             body = body.decode()
@@ -77,24 +69,15 @@ class Client():
             command_id = body['commandId']
             command_args = body['commandArgument']
 
-
         if job_action == "Stop":
             self.stop_job()
         elif job_action == "Start":
-            # TODO: check if another command is running
+            print("[+] Got command")
             command_function = self.commands[command_id]
-            self.event_controller.set()
-            thread = threading.Thread(target=command_function, args=(command_args,))
-            thread.start()
+            self.job_process = multiprocessing.Process(target=command_function, args=(command_args,))
+            self.job_process.start()
         else:
             print("[-] Unknown job action")
-
-
-    def stop_job(self):
-        if self.event_controller.is_set():
-            self.event_controller.clear()
-            self.botnet_job_id = 0
-            self.finish_command("Stopped")
 
 
     def command_wrapper(command):
@@ -104,29 +87,33 @@ class Client():
             bot_data['status'] = "Working"
             url = "https://192.168.0.114:45456/api/v1/Bots/" + str(self.bot_id)
             headers = {'Content-type':'application/json', 'Accept':'application/json'}
-            result = requests.put(url=url, verify=False, json=bot_data, headers=headers)
-            print(result)
+            requests.put(url=url, verify=False, json=bot_data, headers=headers)
 
-            while self.event_controller.is_set():
-                (is_done, result) = command(self, command_args)
-                if is_done:
-                    self.finish_command(result)
+            result = command(self, command_args)
+            self.finish_command(result)
         return command_controller
 
 
+    def stop_job(self):
+        if self.job_process.is_alive():
+            self.job_process.terminate()
+            print("[*] Stopped command")
+            self.finish_command("Stopped")
+
+
     def finish_command(self, result):
-        self.event_controller.clear()
         url = "https://192.168.0.114:45455/api/v1/BotnetJob/" + str(self.botnet_job_id)
         requests.delete(url=url, verify=False)
-        self.botnet_job_id = 0
         url = "https://192.168.0.114:45456/api/v1/Bots/bot/" + str(self.bot_id)
         bot_data = requests.get(url=url, verify=False).json()
         bot_data['status'] = "Waiting"
+        #TODO: send put to botnetjobs instead
         url = "https://192.168.0.114:45456/api/v1/Bots/" + str(self.bot_id)
         headers = {'Content-type':'application/json', 'Accept':'application/json'}
         requests.put(url=url, verify=False, json=bot_data, headers=headers)
 
 
+    # TODO: unused function
     def send_result(self, result):
         channel = self.connection.channel()
 
@@ -134,7 +121,7 @@ class Client():
 
         channel.queue_declare(queue='command_results')
         channel.basic_publish(exchange='', routing_key='command_results', body=body)
-        
+
         print("[+] Result sent")
 
 
@@ -146,7 +133,7 @@ class Client():
             print(f"Iteration {i}")
             time.sleep(1)
         print("Command finished")
-        return (True, result)
+        return result
 
     @command_wrapper
     def command2(self, command_args):
@@ -156,16 +143,17 @@ class Client():
             print(f"Iteration {i}")
             time.sleep(1)
         print("Command finished")
-        return (True, result)
+        return result
 
     @command_wrapper
     def command3(self, command_args):
+        result = "Looped"
         print("Command 3 started")
-        print("Press a key to finish...")
-        input(">")
+        for i in range(10):
+            print(f"Iteration {i}")
+            time.sleep(3)
         print("Command finished")
-        result = "Finished"
-        return (True, result)
+        return result
 
 
 if __name__ == "__main__":
