@@ -102,6 +102,7 @@ namespace BotnetJobs.API.Controllers.v1
             }
         }
 
+        // TODO: Maybe delete botnetjob by id?
         [HttpDelete("{id}")]
         public async Task<ActionResult<BotnetJob>> DeleteBotnetJob(int id)
         {
