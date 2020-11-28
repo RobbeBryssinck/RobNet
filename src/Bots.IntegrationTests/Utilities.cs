@@ -1,40 +1,28 @@
-﻿using System.Linq;
+﻿using Bots.Data.Database;
 using Bots.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Bots.Data.Database
+namespace Bots.IntegrationTests
 {
-    public class DbInitializer
+    public static class Utilities
     {
-        public static void Initialize(BotsContext context)
+        public static void InitializeDbForTests(BotsContext context)
         {
-            context.Database.EnsureCreated();
+            context.Bots.AddRange(GetSeedingBots());
+            context.SaveChanges();
+        }
 
-            if (context.Botnets.Any())
-                return;
+        public static void ReinitializeDbForTests(BotsContext context)
+        {
+            context.Bots.RemoveRange(context.Bots);
+            InitializeDbForTests(context);
+        }
 
-            var botnets = new Botnet[]
-            {
-                new Botnet
-                {
-                    Status = "Waiting",
-                },
-                new Botnet
-                {
-                    Status = "Waiting",
-                },
-                new Botnet
-                {
-                    Status = "Working",
-                    Command = "Crypto mining"
-                },
-            };
-
-            foreach (Botnet botnet in botnets)
-            {
-                context.Botnets.Add(botnet);
-            }
-
-            var bots = new Bot[]
+        private static Bot[] GetSeedingBots()
+        {
+            return new Bot[]
             {
                 //new Bot
                 //{
@@ -107,13 +95,6 @@ namespace Bots.Data.Database
                     Status = "Waiting",
                 },
             };
-
-            foreach (Bot bot in bots)
-            {
-                context.Bots.Add(bot);
-            }
-
-            context.SaveChanges();
         }
     }
 }

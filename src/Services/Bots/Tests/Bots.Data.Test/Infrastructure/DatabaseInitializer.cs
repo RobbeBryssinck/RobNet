@@ -1,39 +1,24 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Bots.Data.Database;
 using Bots.Domain.Entities;
 
-namespace Bots.Data.Database
+namespace Bots.Data.Test.Infrastructure
 {
-    public class DbInitializer
+    public class DatabaseInitializer
     {
         public static void Initialize(BotsContext context)
         {
-            context.Database.EnsureCreated();
-
-            if (context.Botnets.Any())
+            if (context.Bots.Any())
+            {
                 return;
-
-            var botnets = new Botnet[]
-            {
-                new Botnet
-                {
-                    Status = "Waiting",
-                },
-                new Botnet
-                {
-                    Status = "Waiting",
-                },
-                new Botnet
-                {
-                    Status = "Working",
-                    Command = "Crypto mining"
-                },
-            };
-
-            foreach (Botnet botnet in botnets)
-            {
-                context.Botnets.Add(botnet);
             }
 
+            Seed(context);
+        }
+
+        private static void Seed(BotsContext context)
+        {
             var bots = new Bot[]
             {
                 //new Bot
@@ -108,11 +93,7 @@ namespace Bots.Data.Database
                 },
             };
 
-            foreach (Bot bot in bots)
-            {
-                context.Bots.Add(bot);
-            }
-
+            context.Bots.AddRange(bots);
             context.SaveChanges();
         }
     }

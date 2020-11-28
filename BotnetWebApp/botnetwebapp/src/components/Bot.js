@@ -10,16 +10,20 @@ function Bot({ bot, deleteBot }) {
       <td>{bot.id}</td>
       <td>{bot.ip}</td>
       <td>{bot.platform}</td>
-      <td>{bot.status}</td>
-      <td>{bot.sshName}</td>
-      <td>
-        <button>SSH</button>
-      </td>
+      <BotStatus bot={bot} />
       <td>
         <button onClick={handleDelete}>Delete?</button>
       </td>
     </tr>
   );
+}
+
+function BotStatus({ bot }) {
+  if (bot.status === "Working") {
+    return <td style={{ color: "darkgreen" }}>{bot.status}</td>;
+  } else {
+    return <td style={{ color: "darkred" }}>{bot.status}</td>;
+  }
 }
 
 export default Bot;

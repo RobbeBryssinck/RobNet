@@ -3,24 +3,32 @@ import axios from "axios";
 import Bot from "./Bot";
 import ExploitMachineForm from "./ExploitMachineForm";
 import AddBotForm from "./AddBotForm";
+import useInterval from "../utils";
 
 const BotsUri = "https://localhost:44360/api/v1/Bots/";
 const ExploitsUri = "https://localhost:44343/api/v1/Exploits/";
 
-function BotList() {
+function BotList({ botnetStatus, botnetId }) {
   const [botList, setBotList] = useState([]);
 
   useEffect(() => {
     // TODO: Why set empty array first?
     setBotList([]);
-    axios.get(BotsUri + "1").then((res) => {
+    axios.get(BotsUri + botnetId).then((res) => {
       const newBotList = res.data;
       setBotList(newBotList);
     });
   }, []);
 
+  useInterval(() => {
+    axios.get(BotsUri + botnetId).then((res) => {
+      const newBotList = res.data;
+      setBotList(newBotList);
+    });
+  }, 1 * 1000);
+
   const addBot = (bot) => {
-    axios.post(ExploitsUri, bot).then((res) => {
+    axios.post(BotsUri, bot).then((res) => {
       const newBot = res.data;
       const newBotList = [...botList, newBot];
       setBotList(newBotList);
@@ -56,8 +64,6 @@ function BotList() {
             <th>IP address</th>
             <th>Platform</th>
             <th>Status</th>
-            <th>SSH name</th>
-            <th>SSH</th>
             <th>Remove</th>
           </tr>
         </thead>
@@ -68,7 +74,7 @@ function BotList() {
         </tbody>
       </table>
       <ExploitMachineForm exploitMachine={exploitMachine} />
-      <AddBotForm addBot={addBot} />
+      <AddBotForm addBot={addBot} botnetId={botnetId} />
     </div>
   );
 }
