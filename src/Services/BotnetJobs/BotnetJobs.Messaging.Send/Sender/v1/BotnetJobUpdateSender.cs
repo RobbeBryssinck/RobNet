@@ -35,8 +35,6 @@ namespace BotnetJobs.Messaging.Send.Sender.v1
 
             channel.BasicPublish(exchange: "", routingKey: _queueName, basicProperties: null, body: body);
 
-            if (botnetJob.JobAction == "Stop") return;
-
             using var botsChannel = connection.CreateModel();
             botsChannel.ExchangeDeclare(exchange: "C2Commands" + botnetJob.BotnetId.ToString(), type: "fanout");
             botsChannel.BasicPublish(exchange: "C2Commands" + botnetJob.BotnetId.ToString(), routingKey: "",
