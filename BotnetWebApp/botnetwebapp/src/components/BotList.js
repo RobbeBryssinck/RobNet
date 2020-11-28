@@ -12,7 +12,6 @@ function BotList({ botnetStatus, botnetId }) {
   const [botList, setBotList] = useState([]);
 
   useEffect(() => {
-    // Prevent race condition
     setBotList([]);
     axios.get(BotsUri + botnetId).then((res) => {
       const newBotList = res.data;
