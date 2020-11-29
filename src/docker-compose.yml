@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  botnetjobs.api:
+    image: ${DOCKER_REGISTRY-}botnetjobsapi
+    build:
+      context: .
+      dockerfile: Services/BotnetJobs/BotnetJobs.API/Dockerfile
+
+  bots.api:
+    image: ${DOCKER_REGISTRY-}botsapi
+    build:
+      context: .
+      dockerfile: Services/Bots/Bots.API/Dockerfile
+
