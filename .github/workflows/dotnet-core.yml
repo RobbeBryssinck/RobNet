@@ -18,11 +18,11 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore RobNet.sln
       working-directory: src
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build RobNet.sln --configuration Release --no-restore
       working-directory: src
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test RobNet.sln --no-restore --verbosity normal
       working-directory: src
