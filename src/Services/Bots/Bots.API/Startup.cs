@@ -42,10 +42,10 @@ namespace Bots.API
         {
             services.AddOptions();
 
-            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));
+            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("rabbitmq"));
 
             services.AddDbContext<BotsContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("BotsDB")));
+                options.UseInMemoryDatabase("BotsDB"));
 
             services.AddAutoMapper(typeof(Startup));
 

@@ -53,7 +53,8 @@ namespace Bots.API
                 .ConfigureAppConfiguration((hostingcontext, config) =>
                 {
                     config.AddJsonFile("appsettings.json", false, true)
-                        .AddJsonFile($"appsettings.{hostingcontext.HostingEnvironment.EnvironmentName}.json", true, true);
+                        .AddJsonFile($"appsettings.{hostingcontext.HostingEnvironment.EnvironmentName}.json", true, true)
+                        .AddEnvironmentVariables();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

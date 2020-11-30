@@ -39,10 +39,10 @@ namespace BotnetJobs.API
         {
             services.AddOptions();
 
-            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));
+            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("rabbitmq"));
 
             services.AddDbContext<BotnetJobContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("BotnetJobsDB")));
+                options.UseInMemoryDatabase("BotnetJobsDB"));
 
             services.AddAutoMapper(typeof(Startup));
 
