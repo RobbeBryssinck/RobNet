@@ -5,10 +5,12 @@ import BotnetCommands from "./BotnetCommands";
 import BotList from "./BotList";
 import useInterval from "../utils";
 
-const BotnetsUri = process.env.REACT_APP_BOTNETS_URI;
-const BotnetJobsUri = process.env.REACT_APP_BOTNETJOBS_URI;
+const BotnetsUri = "https://localhost:32800/api/v1/Botnets/";
+const BotnetJobsUri = "https://localhost:32802/api/v1/Botnetjob/";
 
 function Botnet() {
+  console.log(BotnetsUri);
+  console.log(BotnetJobsUri);
   const [id, setId] = useState(1);
   const [status, setStatus] = useState();
   const [command, setCommand] = useState();
