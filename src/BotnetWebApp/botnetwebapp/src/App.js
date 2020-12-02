@@ -3,15 +3,20 @@ import "./App.css";
 import Banner from "./components/Banner";
 import Botnet from "./components/Botnet";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Row, Col, Container } from "react-bootstrap";
+
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 function App() {
   return (
-    <div>
-      <Banner />
+    <Container>
+      <Row>
+        <Banner />
+      </Row>
       <Botnet />
-    </div>
+    </Container>
   );
 }
 

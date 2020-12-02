@@ -5,6 +5,8 @@ import BotnetCommands from "./BotnetCommands";
 import BotList from "./BotList";
 import useInterval from "../utils";
 
+import { Col, Row, Card } from "react-bootstrap";
+
 const BotnetsUri = "https://localhost:32853/api/v1/Botnets/";
 const BotnetJobsUri = "https://localhost:32851/api/v1/Botnetjob/";
 
@@ -42,7 +44,7 @@ function Botnet() {
     if (status === "Working") {
       setStatusColor("darkgreen");
     } else {
-      setStatusColor("darkred");
+      setStatusColor("black");
     }
   }, [status]);
 
@@ -64,21 +66,51 @@ function Botnet() {
 
   return (
     <>
-      <div className="container">
-        <h2>Botnet</h2>
-        <b>ID: </b>
-        <span>{id} </span>
-        <b>Status: </b>
-        <span style={{ color: statusColor }}>{status} </span>
-        <BotnetCurrentCommand status={status} command={command} />
+      <Card className="shadow" body>
+        <Row>
+          <Col>
+            <h2>Botnet</h2>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h4>Status</h4>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Row>
+              <Col>
+                <b>ID: </b>
+                <span>{id} </span>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <b>Status: </b>
+                <span style={{ color: statusColor }}>{status} </span>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <BotnetCurrentCommand status={status} command={command} />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
         <br />
-        <BotnetCommands
-          id={id}
-          botnetStatus={status}
-          createBotnetJob={createBotnetJob}
-          cancelBotnetJob={cancelBotnetJob}
-        />
-      </div>
+        <Row>
+          <Col>
+            <BotnetCommands
+              id={id}
+              botnetStatus={status}
+              createBotnetJob={createBotnetJob}
+              cancelBotnetJob={cancelBotnetJob}
+            />
+          </Col>
+        </Row>
+      </Card>
+      <br />
       <BotList botnetId={id} />
     </>
   );

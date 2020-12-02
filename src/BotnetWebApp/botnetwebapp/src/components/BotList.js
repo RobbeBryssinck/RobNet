@@ -5,11 +5,17 @@ import ExploitMachineForm from "./ExploitMachineForm";
 import AddBotForm from "./AddBotForm";
 import useInterval from "../utils";
 
+import { Col, Row, Table, Card, Button, Modal } from "react-bootstrap";
+
 const BotsUri = "https://localhost:32853/api/v1/Bots/";
 const ExploitsUri = "undefined";
 
 function BotList({ botnetId }) {
   const [botList, setBotList] = useState([]);
+  const [showAddBot, setShowAddBot] = useState(false);
+
+  const handleCloseAddBot = () => setShowAddBot(false);
+  const handleShowAddBot = () => setShowAddBot(true);
 
   useEffect(() => {
     setBotList([]);
@@ -54,9 +60,13 @@ function BotList({ botnetId }) {
   };
 
   return (
-    <div className="BotList container">
-      <h2>Bots</h2>
-      <table id="botlist-table">
+    <Card className="shadow" body>
+      <Row>
+        <Col>
+          <h2>Bots</h2>
+        </Col>
+      </Row>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>ID</th>
@@ -71,10 +81,10 @@ function BotList({ botnetId }) {
             <Bot key={bot.id} bot={bot} deleteBot={deleteBot} />
           ))}
         </tbody>
-      </table>
-      <ExploitMachineForm exploitMachine={exploitMachine} />
+      </Table>
       <AddBotForm addBot={addBot} botnetId={botnetId} />
-    </div>
+      <ExploitMachineForm exploitMachine={exploitMachine} />
+    </Card>
   );
 }
 

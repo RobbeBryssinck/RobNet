@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Button } from "react-bootstrap";
+
 function Bot({ bot, deleteBot }) {
   const handleDelete = () => {
     deleteBot(bot);
@@ -12,7 +14,9 @@ function Bot({ bot, deleteBot }) {
       <td>{bot.platform}</td>
       <BotStatus bot={bot} />
       <td>
-        <button onClick={handleDelete}>Delete?</button>
+        <Button variant="danger" onClick={handleDelete}>
+          Delete
+        </Button>
       </td>
     </tr>
   );
@@ -22,7 +26,7 @@ function BotStatus({ bot }) {
   if (bot.status === "Working") {
     return <td style={{ color: "darkgreen" }}>{bot.status}</td>;
   } else {
-    return <td style={{ color: "darkred" }}>{bot.status}</td>;
+    return <td style={{ color: "black" }}>{bot.status}</td>;
   }
 }
 

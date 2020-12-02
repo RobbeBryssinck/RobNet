@@ -1,10 +1,12 @@
 import React from "react";
 
+import { Col } from "react-bootstrap";
+
 function Banner() {
   return (
-    <div className="Banner">
+    <Col>
       <h1>BaaS</h1>
-    </div>
+    </Col>
   );
 }
 
