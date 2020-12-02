@@ -24,7 +24,7 @@ function Botnet() {
       setStatus(newBotnet.status);
       setCommand(newBotnet.command);
     });
-  }, []);
+  }, [id]);
 
   useInterval(() => {
     axios.get(BotnetsUri + id).then((res) => {

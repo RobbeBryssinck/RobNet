@@ -4,7 +4,7 @@ import Banner from "./components/Banner";
 import Botnet from "./components/Botnet";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Container } from "react-bootstrap";
 
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });

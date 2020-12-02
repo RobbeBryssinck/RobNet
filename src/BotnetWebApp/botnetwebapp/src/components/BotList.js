@@ -5,17 +5,13 @@ import ExploitMachineForm from "./ExploitMachineForm";
 import AddBotForm from "./AddBotForm";
 import useInterval from "../utils";
 
-import { Col, Row, Table, Card, Button, Modal } from "react-bootstrap";
+import { Col, Row, Table, Card } from "react-bootstrap";
 
 const BotsUri = "https://localhost:32853/api/v1/Bots/";
 const ExploitsUri = "undefined";
 
 function BotList({ botnetId }) {
   const [botList, setBotList] = useState([]);
-  const [showAddBot, setShowAddBot] = useState(false);
-
-  const handleCloseAddBot = () => setShowAddBot(false);
-  const handleShowAddBot = () => setShowAddBot(true);
 
   useEffect(() => {
     setBotList([]);
@@ -23,7 +19,7 @@ function BotList({ botnetId }) {
       const newBotList = res.data;
       setBotList(newBotList);
     });
-  }, []);
+  }, [botnetId]);
 
   useInterval(() => {
     axios.get(BotsUri + botnetId).then((res) => {

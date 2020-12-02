@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, Form, Row, Col } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 function BotnetCommands({
   id,
