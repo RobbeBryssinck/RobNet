@@ -108,8 +108,6 @@ namespace BotnetJobs.API
 
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
-            app.UseHttpsRedirection();
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

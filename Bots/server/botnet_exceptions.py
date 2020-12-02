@@ -1,2 +1,0 @@
-class NoBotsException(Exception):
-    pass

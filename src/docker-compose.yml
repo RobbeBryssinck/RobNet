@@ -42,3 +42,40 @@ services:
     depends_on:
       - botnetjobs.api
       - bots.api
+
+  bot1:
+    container_name: bot1
+    build:
+      context: .
+      dockerfile: Bots/client/Dockerfile
+    volumes:
+      - '.:/code'
+    environment:
+      BOTNET_ID: 1
+      BOT_ID: 1
+      RABBITMQ_HOSTNAME: rabbitmq
+      BOTNETJOBS_ADDRESS: botnetjobs.api
+      BOTS_ADDRESS: bots.api
+    depends_on:
+      - rabbitmq
+      - botnetjobs.api
+      - bots.api
+
+  bot2:
+    container_name: bot2
+    build:
+      context: .
+      dockerfile: Bots/client/Dockerfile
+    volumes:
+      - '.:/code'
+    environment:
+      BOTNET_ID: 1
+      BOT_ID: 2
+      RABBITMQ_HOSTNAME: rabbitmq
+      BOTNETJOBS_ADDRESS: botnetjobs.api
+      BOTS_ADDRESS: bots.api
+    depends_on:
+      - rabbitmq
+      - botnetjobs.api
+      - bots.api
+
