@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
+import userEvent from "@testing-library/user-event";
 
 import Bot from "../components/Bot";
 
@@ -29,5 +30,15 @@ describe("Bot", () => {
     render(<Bot bot={workingBot} />);
 
     expect(screen.getByText(/Working/)).toBeInTheDocument();
+  });
+
+  test("deletes a bot", async () => {
+    const deleteBot = jest.fn();
+
+    render(<Bot bot={waitingBot} deleteBot={deleteBot} />);
+
+    await userEvent.click(screen.getByRole("button"));
+
+    expect(deleteBot).toHaveBeenCalledTimes(1);
   });
 });

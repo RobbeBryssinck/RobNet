@@ -34,8 +34,6 @@ describe("BotList", () => {
 
     const container = render(<BotList />);
 
-    screen.debug();
-
     await waitForElement(() => container.queryAllByPlaceholderText("Bot IP"));
 
     const items = await screen.findAllByRole("row");
