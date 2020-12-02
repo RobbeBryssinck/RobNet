@@ -5,8 +5,8 @@ import ExploitMachineForm from "./ExploitMachineForm";
 import AddBotForm from "./AddBotForm";
 import useInterval from "../utils";
 
-const BotsUri = "https://localhost:32800/api/v1/Bots/";
-const ExploitsUri = "https://localhost:44343/api/v1/Exploits/";
+const BotsUri = "https://localhost:32853/api/v1/Bots/";
+const ExploitsUri = "undefined";
 
 function BotList({ botnetStatus, botnetId }) {
   const [botList, setBotList] = useState([]);
