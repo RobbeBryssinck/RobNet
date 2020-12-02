@@ -8,7 +8,7 @@ function Bot({ bot, deleteBot }) {
   return (
     <tr>
       <td>{bot.id}</td>
-      <td>{bot.ip}</td>
+      <td placeholder="Bot IP">{bot.ip}</td>
       <td>{bot.platform}</td>
       <BotStatus bot={bot} />
       <td>

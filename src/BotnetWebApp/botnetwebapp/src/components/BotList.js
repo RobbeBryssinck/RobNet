@@ -8,7 +8,7 @@ import useInterval from "../utils";
 const BotsUri = "https://localhost:32853/api/v1/Bots/";
 const ExploitsUri = "undefined";
 
-function BotList({ botnetStatus, botnetId }) {
+function BotList({ botnetId }) {
   const [botList, setBotList] = useState([]);
 
   useEffect(() => {

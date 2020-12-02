@@ -79,7 +79,7 @@ function Botnet() {
           cancelBotnetJob={cancelBotnetJob}
         />
       </div>
-      <BotList botnetStatus={status} botnetId={id} />
+      <BotList botnetId={id} />
     </>
   );
 }
