@@ -48,9 +48,9 @@ describe("BotList", () => {
   test("delete bot from botlist", async () => {
     axios.get.mockImplementation(() => Promise.resolve({ data: bots }));
     axios.delete.mockImplementation(() => Promise.resolve());
-    const container = render(<BotList />);
+    render(<BotList />);
 
-    await waitForElement(() => container.queryAllByPlaceholderText("Bot IP"));
+    await waitForElement(() => screen.getByText(/192.168.0.144/));
     userEvent.click(screen.getAllByRole("button")[0]);
     await waitForElementToBeRemoved(() => screen.getByText(/192.168.0.144/));
     const items = await screen.findAllByRole("row");
