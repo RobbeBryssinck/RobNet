@@ -15,17 +15,23 @@ function BotList({ botnetId }) {
 
   useEffect(() => {
     setBotList([]);
-    axios.get(BotsUri + botnetId).then((res) => {
-      const newBotList = res.data;
-      setBotList(newBotList);
-    });
+    axios
+      .get(BotsUri + botnetId)
+      .then((res) => {
+        const newBotList = res.data;
+        setBotList(newBotList);
+      })
+      .catch(() => setBotList([]));
   }, [botnetId]);
 
   useInterval(() => {
-    axios.get(BotsUri + botnetId).then((res) => {
-      const newBotList = res.data;
-      setBotList(newBotList);
-    });
+    axios
+      .get(BotsUri + botnetId)
+      .then((res) => {
+        const newBotList = res.data;
+        setBotList(newBotList);
+      })
+      .catch(() => setBotList([]));
   }, 1 * 1000);
 
   const addBot = (bot) => {
@@ -55,33 +61,52 @@ function BotList({ botnetId }) {
     });
   };
 
-  return (
-    <Card className="shadow" body>
-      <Row>
-        <Col>
-          <h2>Bots</h2>
-        </Col>
-      </Row>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>IP address</th>
-            <th>Platform</th>
-            <th>Status</th>
-            <th>Remove</th>
-          </tr>
-        </thead>
-        <tbody>
-          {botList.map((bot) => (
-            <Bot key={bot.id} bot={bot} deleteBot={deleteBot} />
-          ))}
-        </tbody>
-      </Table>
-      <AddBotForm addBot={addBot} botnetId={botnetId} />
-      <ExploitMachineForm exploitMachine={exploitMachine} />
-    </Card>
-  );
+  if (botList.length === 0) {
+    return (
+      <Card className="shadow" body>
+        <Row>
+          <Col>
+            <h2>Bots</h2>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <p>This botnet has no bots yet.</p>
+          </Col>
+        </Row>
+        <AddBotForm addBot={addBot} botnetId={botnetId} />
+        <ExploitMachineForm exploitMachine={exploitMachine} />
+      </Card>
+    );
+  } else {
+    return (
+      <Card className="shadow" body>
+        <Row>
+          <Col>
+            <h2>Bots</h2>
+          </Col>
+        </Row>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>IP address</th>
+              <th>Platform</th>
+              <th>Status</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            {botList.map((bot) => (
+              <Bot key={bot.id} bot={bot} deleteBot={deleteBot} />
+            ))}
+          </tbody>
+        </Table>
+        <AddBotForm addBot={addBot} botnetId={botnetId} />
+        <ExploitMachineForm exploitMachine={exploitMachine} />
+      </Card>
+    );
+  }
 }
 
 export default BotList;

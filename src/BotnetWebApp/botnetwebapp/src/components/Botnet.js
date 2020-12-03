@@ -18,26 +18,35 @@ function Botnet() {
   const [statusColor, setStatusColor] = useState();
 
   useEffect(() => {
-    axios.get(BotnetsUri + id).then((res) => {
-      const newBotnet = res.data;
-      setId(newBotnet.id);
-      setStatus(newBotnet.status);
-      setCommand(newBotnet.command);
-    });
+    axios
+      .get(BotnetsUri + id)
+      .then((res) => {
+        const newBotnet = res.data;
+        setId(newBotnet.id);
+        setStatus(newBotnet.status);
+        setCommand(newBotnet.command);
+      })
+      .catch(() => setId(undefined));
   }, [id]);
 
   useInterval(() => {
-    axios.get(BotnetsUri + id).then((res) => {
-      const newBotnet = res.data;
-      setId(newBotnet.id);
-      setStatus(newBotnet.status);
-      setCommand(newBotnet.command);
-      if (newBotnet.status === "Working") {
-        axios.get(BotnetJobsUri + id).then((jobres) => {
-          setBotnetjobId(jobres.data.id);
-        });
-      }
-    });
+    axios
+      .get(BotnetsUri + id)
+      .then((res) => {
+        const newBotnet = res.data;
+        setId(newBotnet.id);
+        setStatus(newBotnet.status);
+        setCommand(newBotnet.command);
+        if (newBotnet.status === "Working") {
+          axios
+            .get(BotnetJobsUri + id)
+            .then((jobres) => {
+              setBotnetjobId(jobres.data.id);
+            })
+            .catch(() => setId(undefined));
+        }
+      })
+      .catch(() => setId(undefined));
   }, 1 * 1000);
 
   useEffect(() => {
@@ -64,8 +73,8 @@ function Botnet() {
     });
   };
 
-  return (
-    <>
+  if (!id) {
+    return (
       <Card className="shadow" body>
         <Row>
           <Col>
@@ -74,46 +83,63 @@ function Botnet() {
         </Row>
         <Row>
           <Col>
-            <h4>Status</h4>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Row>
-              <Col>
-                <b>ID: </b>
-                <span>{id} </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <b>Status: </b>
-                <span style={{ color: statusColor }}>{status} </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <BotnetCurrentCommand status={status} command={command} />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <br />
-        <Row>
-          <Col>
-            <BotnetCommands
-              id={id}
-              botnetStatus={status}
-              createBotnetJob={createBotnetJob}
-              cancelBotnetJob={cancelBotnetJob}
-            />
+            <p>The requested botnet is not available or does not exist.</p>
           </Col>
         </Row>
       </Card>
-      <br />
-      <BotList botnetId={id} />
-    </>
-  );
+    );
+  } else {
+    return (
+      <>
+        <Card className="shadow" body>
+          <Row>
+            <Col>
+              <h2>Botnet</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <h4>Status</h4>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Row>
+                <Col>
+                  <b>ID: </b>
+                  <span>{id} </span>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <b>Status: </b>
+                  <span style={{ color: statusColor }}>{status} </span>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <BotnetCurrentCommand status={status} command={command} />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <br />
+          <Row>
+            <Col>
+              <BotnetCommands
+                id={id}
+                botnetStatus={status}
+                createBotnetJob={createBotnetJob}
+                cancelBotnetJob={cancelBotnetJob}
+              />
+            </Col>
+          </Row>
+        </Card>
+        <br />
+        <BotList botnetId={id} />
+      </>
+    );
+  }
 }
 
 export default Botnet;

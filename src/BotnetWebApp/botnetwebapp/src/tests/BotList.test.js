@@ -37,8 +37,8 @@ const bots = [
 describe("BotList", () => {
   test("checks botlist for bots", async () => {
     axios.get.mockImplementation(() => Promise.resolve({ data: bots }));
-    const container = render(<BotList />);
 
+    const container = render(<BotList />);
     await waitForElement(() => container.queryAllByPlaceholderText("Bot IP"));
     const items = await screen.findAllByRole("row");
 
@@ -48,13 +48,22 @@ describe("BotList", () => {
   test("delete bot from botlist", async () => {
     axios.get.mockImplementation(() => Promise.resolve({ data: bots }));
     axios.delete.mockImplementation(() => Promise.resolve());
-    render(<BotList />);
 
+    render(<BotList />);
     await waitForElement(() => screen.getByText(/192.168.0.144/));
     userEvent.click(screen.getAllByRole("button")[0]);
     await waitForElementToBeRemoved(() => screen.getByText(/192.168.0.144/));
     const items = await screen.findAllByRole("row");
 
     expect(items).toHaveLength(3);
+  });
+
+  test("display message if botlist is empty", async () => {
+    axios.get.mockImplementation(() => Promise.reject(new Error()));
+
+    render(<BotList />);
+    const message = await screen.findByText(/This botnet has no bots yet./);
+
+    expect(message).toBeInTheDocument();
   });
 });

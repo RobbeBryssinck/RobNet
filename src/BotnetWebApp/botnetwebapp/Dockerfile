@@ -18,5 +18,3 @@ COPY BotnetWebApp/botnetwebapp ./
 
 # start app
 CMD ["npm", "start"]
-
-# run command: docker run -it --rm -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true botnetwapp
