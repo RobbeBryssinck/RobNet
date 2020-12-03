@@ -25,6 +25,7 @@ services:
       - rabbitmq
   
   botnetwapp:
+    image: botnetwapp
     container_name: botnetwapp
     build:
       context: .
@@ -41,6 +42,7 @@ services:
       - bots.api
 
   bot1:
+    image: bot1
     container_name: bot1
     build:
       context: .
@@ -59,6 +61,7 @@ services:
       - bots.api
 
   bot2:
+    image: bot2
     container_name: bot2
     build:
       context: .
