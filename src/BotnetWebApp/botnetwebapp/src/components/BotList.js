@@ -8,7 +8,7 @@ import useInterval from "../utils";
 import { Col, Row, Table, Card } from "react-bootstrap";
 
 const BotsUri = "https://localhost:32853/api/v1/Bots/";
-const ExploitsUri = "undefined";
+const ExploitsUri = "https://localhost:32853/api/v1/Bots/";
 
 function BotList({ botnetId }) {
   const [botList, setBotList] = useState([]);
@@ -103,7 +103,7 @@ function BotList({ botnetId }) {
           </tbody>
         </Table>
         <AddBotForm addBot={addBot} botnetId={botnetId} />
-        <ExploitMachineForm exploitMachine={exploitMachine} />
+        <ExploitMachineForm addBot={addBot} botnetId={botnetId} />
       </Card>
     );
   }

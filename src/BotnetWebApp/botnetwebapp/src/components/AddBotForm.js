@@ -5,7 +5,7 @@ import { Button, Form, Row, Col, Modal } from "react-bootstrap";
 
 function AddBotForm({ addBot, botnetId }) {
   const [ip, setIp] = useState("");
-  const [platform, setPlatform] = useState("");
+  const [platform, setPlatform] = useState("Linux");
   const [showModal, setShowModal] = useState(false);
 
   const handleCloseModal = () => setShowModal(false);
@@ -24,6 +24,7 @@ function AddBotForm({ addBot, botnetId }) {
 
     setIp("");
     setPlatform("");
+    handleCloseModal();
   };
 
   return (
@@ -50,8 +51,15 @@ function AddBotForm({ addBot, botnetId }) {
               <Form.Label column>Platform</Form.Label>
               <Col>
                 <Form.Control as="select">
-                  <option value="Linux">Linux</option>
-                  <option value="Windows">Windows</option>
+                  <option value="Linux" onClick={() => setPlatform("Linux")}>
+                    Linux
+                  </option>
+                  <option
+                    value="Windows"
+                    onClick={() => setPlatform("Windows")}
+                  >
+                    Windows
+                  </option>
                 </Form.Control>
               </Col>
             </Form.Group>
