@@ -44,11 +44,24 @@ namespace Bots.Messaging.Receive.Receiver.v1
                 Password = _password
             };
 
-            _connection = factory.CreateConnection();
-            _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
-            _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false,
-                arguments: null);
+            bool connected = false;
+
+            while (!connected)
+            {
+                try
+                {
+
+                    _connection = factory.CreateConnection();
+                    _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
+                    _channel = _connection.CreateModel();
+                    _channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false,
+                        arguments: null);
+                }
+                catch (Exception e)
+                {
+                    Thread.Sleep(5000);
+                }
+            }
         }
 
         protected override Task ExecuteAsync(CancellationToken cancellationToken)
