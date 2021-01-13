@@ -56,9 +56,11 @@ namespace Bots.Messaging.Receive.Receiver.v1
                     _channel = _connection.CreateModel();
                     _channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false,
                         arguments: null);
+                    connected = true;
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine("Can't connect to RabbitMQ, retrying...");
                     Thread.Sleep(5000);
                 }
             }
