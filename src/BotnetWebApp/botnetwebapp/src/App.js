@@ -13,7 +13,7 @@ function App() {
   return (
     <Container>
       <Row>
-        <Banner />
+        <Banner name={"RobNet"} />
       </Row>
       <Botnet />
     </Container>

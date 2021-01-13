@@ -2,10 +2,10 @@ import React from "react";
 
 import { Col } from "react-bootstrap";
 
-function Banner() {
+function Banner({ name }) {
   return (
     <Col>
-      <h1>BaaS</h1>
+      <h1>{name}</h1>
     </Col>
   );
 }

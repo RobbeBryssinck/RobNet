@@ -42,7 +42,7 @@ services:
       - bots.api
 
   bot1:
-    image: bot1
+    image: botclient
     container_name: bot1
     build:
       context: .
@@ -61,7 +61,7 @@ services:
       - bots.api
 
   bot2:
-    image: bot2
+    image: botclient
     container_name: bot2
     build:
       context: .
