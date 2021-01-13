@@ -6,8 +6,8 @@ import Banner from "../components/Banner";
 
 describe("Banner", () => {
   test("checks banner for text", () => {
-    render(<Banner />);
+    render(<Banner name={"RobNet"} />);
 
-    expect(screen.getByText(/BaaS/)).toBeInTheDocument();
+    expect(screen.getByText(/RobNet/)).toBeInTheDocument();
   });
 });
