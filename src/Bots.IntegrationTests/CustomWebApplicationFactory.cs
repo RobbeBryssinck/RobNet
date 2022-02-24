@@ -18,7 +18,7 @@ namespace Bots.IntegrationTests
             //base.ConfigureWebHost(builder);
             builder.ConfigureServices(services =>
             {
-                Bot descriptor = services.SingleOrDefault(
+                var descriptor = services.SingleOrDefault(
                     d => d.ServiceType == typeof(DbContextOptions<BotsContext>));
 
                 if (descriptor != null)
