@@ -23,7 +23,7 @@ namespace Bots.API.Test.Controllers
 
         public BotsControllerTests()
         {
-            var mapper = A.Fake<IMapper>();
+            IMapper mapper = A.Fake<IMapper>();
             _mediator = A.Fake<IMediator>();
             _testee = new BotsController(mapper, _mediator);
 
@@ -42,7 +42,7 @@ namespace Bots.API.Test.Controllers
                 Status = "Waiting",
                 BotnetId = 1
             };
-            var bot = new Bot
+            Bot bot = new Bot
             {
                 Id = _id,
                 IP = "155.223.25.67",
@@ -62,7 +62,7 @@ namespace Bots.API.Test.Controllers
         {
             A.CallTo(() => _mediator.Send(A<CreateBotCommand>._, default)).Throws(new ArgumentException(exceptionMessage));
 
-            var result = await _testee.PostBot(_createBotModel);
+            ActionResult<Bot> result = await _testee.PostBot(_createBotModel);
 
             (result.Result as StatusCodeResult)?.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
             (result.Result as BadRequestObjectResult)?.Value.Should().Be(exceptionMessage);
@@ -74,7 +74,7 @@ namespace Bots.API.Test.Controllers
         {
             A.CallTo(() => _mediator.Send(A<UpdateBotCommand>._, default)).Throws(new Exception(exceptionMessage));
 
-            var result = await _testee.PutBot(_updateBotModel);
+            ActionResult<Bot> result = await _testee.PutBot(_updateBotModel);
 
             (result.Result as StatusCodeResult)?.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
             (result.Result as BadRequestObjectResult)?.Value.Should().Be(exceptionMessage);
@@ -83,8 +83,8 @@ namespace Bots.API.Test.Controllers
         [Fact]
         public async void Put_WhenBotDoesNotExist_ShouldReturnNotFound()
         {
-            var updateBotModel = new UpdateBotModel { Id = 0 };
-            var result = await _testee.PutBot(updateBotModel);
+            UpdateBotModel updateBotModel = new UpdateBotModel { Id = 0 };
+            ActionResult<Bot> result = await _testee.PutBot(updateBotModel);
 
             (result.Result as StatusCodeResult)?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
@@ -92,7 +92,7 @@ namespace Bots.API.Test.Controllers
         [Fact]
         public async void Post_ShouldReturnBot()
         {
-            var result = await _testee.PostBot(_createBotModel);
+            ActionResult<Bot> result = await _testee.PostBot(_createBotModel);
 
             (result.Result as StatusCodeResult)?.StatusCode.Should().Be((int)HttpStatusCode.OK);
             result.Value.Should().BeOfType<Bot>();
@@ -102,7 +102,7 @@ namespace Bots.API.Test.Controllers
         [Fact]
         public async void Put_ShouldReturnBot()
         {
-            var result = await _testee.PutBot(_updateBotModel);
+            ActionResult<Bot> result = await _testee.PutBot(_updateBotModel);
 
             (result.Result as StatusCodeResult)?.StatusCode.Should().Be((int)HttpStatusCode.OK);
             result.Value.Should().BeOfType<Bot>();

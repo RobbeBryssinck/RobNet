@@ -12,7 +12,7 @@ namespace Bots.Data.Database
             if (context.Botnets.Any())
                 return;
 
-            var botnets = new Botnet[]
+            Botnet[] botnets = new Botnet[]
             {
                 new Botnet
                 {
@@ -34,7 +34,7 @@ namespace Bots.Data.Database
                 context.Botnets.Add(botnet);
             }
 
-            var bots = new Bot[]
+            Bot[] bots = new Bot[]
             {
                 new Bot
                 {

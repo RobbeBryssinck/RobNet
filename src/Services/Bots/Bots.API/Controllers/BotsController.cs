@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using AutoMapper;
-using Bots.Data.Database;
 using Bots.Domain.Entities;
 using Bots.Service.Command;
 using Bots.Service.Query;
@@ -38,7 +34,7 @@ namespace Bots.API.Controllers
         {
             try
             {
-                var bots = await _mediator.Send(new GetBotsByBotnetIdSlicedQuery
+                List<Bot> bots = await _mediator.Send(new GetBotsByBotnetIdSlicedQuery
                 {
                     BotnetId = botnetId,
                     PageSize = pageSize,
@@ -68,7 +64,7 @@ namespace Bots.API.Controllers
             if (id <= 0)
                 return BadRequest();
 
-            var bot = await _mediator.Send(new GetBotByIdQuery
+            Bot bot = await _mediator.Send(new GetBotByIdQuery
             {
                 Id = id
             });
@@ -85,7 +81,7 @@ namespace Bots.API.Controllers
         {
             try
             {
-                var bot = await _mediator.Send(new GetBotByIdQuery
+                Bot bot = await _mediator.Send(new GetBotByIdQuery
                 {
                     Id = updateBotModel.Id
                 });
@@ -112,7 +108,7 @@ namespace Bots.API.Controllers
         {
             try
             {
-                var bot = _mapper.Map<Bot>(createBotModel);
+                Bot bot = _mapper.Map<Bot>(createBotModel);
                 bot.Status = "Waiting";
                 return await _mediator.Send(new CreateBotCommand
                 {
@@ -131,7 +127,7 @@ namespace Bots.API.Controllers
         {
             try
             {
-                var bot = await _mediator.Send(new GetBotByIdQuery
+                Bot bot = await _mediator.Send(new GetBotByIdQuery
                 {
                     Id = id
                 });

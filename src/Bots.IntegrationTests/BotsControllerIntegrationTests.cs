@@ -41,7 +41,7 @@ namespace Bots.IntegrationTests
         [Fact]
         public async Task GetBotsByBotnetId()
         {
-            var result = await _client.GetAsync("api/v1/Bots/1");
+            HttpResponseMessage result = await _client.GetAsync("api/v1/Bots/1");
 
             result?.StatusCode.Should().Be(HttpStatusCode.OK);
         }
@@ -49,7 +49,7 @@ namespace Bots.IntegrationTests
         [Fact]
         public async Task GetBotsByBotnetId_WhenBotDoesNotExist_NotFound()
         {
-            var result = await _client.GetAsync("api/v1/Bots/0");
+            HttpResponseMessage result = await _client.GetAsync("api/v1/Bots/0");
 
             result?.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
@@ -57,15 +57,15 @@ namespace Bots.IntegrationTests
         [Fact]
         public async Task PostBot_ShouldReturnBot()
         {
-            var result = await _client.PostAsync("api/v1/Bots/", 
+            HttpResponseMessage result = await _client.PostAsync("api/v1/Bots/", 
                 new StringContent(JsonConvert.SerializeObject(_createBotModel), 
                     Encoding.UTF8, "application/json"));
 
             result.EnsureSuccessStatusCode();
 
             result?.StatusCode.Should().Be(HttpStatusCode.OK);
-            var resultContentString = await result.Content.ReadAsStringAsync();
-            var resultContentBot = JsonConvert.DeserializeObject<Bot>(resultContentString);
+            string resultContentString = await result.Content.ReadAsStringAsync();
+            Bot resultContentBot = JsonConvert.DeserializeObject<Bot>(resultContentString);
             resultContentBot.Should().BeOfType<Bot>();
         }
     }

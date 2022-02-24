@@ -19,7 +19,7 @@ namespace Bots.Data.Test.Infrastructure
 
         private static void Seed(BotsContext context)
         {
-            var bots = new Bot[]
+            Bot[] bots = new Bot[]
             {
                 //new Bot
                 //{

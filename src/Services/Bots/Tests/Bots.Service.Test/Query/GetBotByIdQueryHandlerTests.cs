@@ -36,7 +36,7 @@ namespace Bots.Service.Test.Query
         {
             A.CallTo(() => _botRepository.GetBotByIdAsync(_id, default)).Returns(_bot);
 
-            var result = await _testee.Handle(new GetBotByIdQuery { Id = _id }, default);
+            Bot result = await _testee.Handle(new GetBotByIdQuery { Id = _id }, default);
 
             A.CallTo(() => _botRepository.GetBotByIdAsync(_id, default)).MustHaveHappenedOnceExactly();
             result.IP.Should().Be("155.223.25.67");

@@ -40,7 +40,7 @@ namespace Bots.Service.Test.Command
                 Platform = "Linux"
             });
 
-            var result = await _testee.Handle(new CreateBotCommand(), default);
+            Bot result = await _testee.Handle(new CreateBotCommand(), default);
 
             result.Should().BeOfType<Bot>();
             result.Platform.Should().Be(_bot.Platform);

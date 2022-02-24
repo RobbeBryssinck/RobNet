@@ -37,7 +37,7 @@ namespace Bots.Messaging.Receive.Receiver.v1
 
         private void InitializeRabbitMqListener()
         {
-            var factory = new ConnectionFactory
+            ConnectionFactory factory = new ConnectionFactory
             {
                 HostName = _hostName,
                 UserName = _userName,
@@ -70,11 +70,11 @@ namespace Bots.Messaging.Receive.Receiver.v1
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var consumer = new EventingBasicConsumer(_channel);
+            EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (ch, ea) =>
             {
-                var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-                var updateBotnetStatusModel = JsonConvert.DeserializeObject<UpdateBotnetStatusModel>(content);
+                string content = Encoding.UTF8.GetString(ea.Body.ToArray());
+                UpdateBotnetStatusModel updateBotnetStatusModel = JsonConvert.DeserializeObject<UpdateBotnetStatusModel>(content);
 
                 HandleMessage(updateBotnetStatusModel);
 

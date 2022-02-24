@@ -35,10 +35,10 @@ namespace Bots.Data.Test.Repository.v1
         [InlineData("1.2.3.4")]
         public async void UpdateBotAsync_WhenBotIsNotNull_ShouldReturnBot(string ip)
         {
-            var bot = _context.Bots.First();
+            Bot bot = _context.Bots.First();
             bot.IP = ip;
 
-            var result = await _testee.UpdateAsync(bot);
+            Bot result = await _testee.UpdateAsync(bot);
 
             result.Should().BeOfType<Bot>();
             result.IP.Should().Be(ip);
@@ -61,7 +61,7 @@ namespace Bots.Data.Test.Repository.v1
         [Fact]
         public async void CreateBotAsync_WhenBotIsNotNull_ShouldReturnBot()
         {
-            var result = await _testee.AddAsync(_newBot);
+            Bot result = await _testee.AddAsync(_newBot);
 
             result.Should().BeOfType<Bot>();
         }
@@ -69,7 +69,7 @@ namespace Bots.Data.Test.Repository.v1
         [Fact]
         public async void CreateBotAsync_WhenBotIsNotNull_ShouldAddBot()
         {
-            var botCount = _context.Bots.Count();
+            int botCount = _context.Bots.Count();
 
             await _testee.AddAsync(_newBot);
 

@@ -18,7 +18,7 @@ namespace Bots.IntegrationTests
             //base.ConfigureWebHost(builder);
             builder.ConfigureServices(services =>
             {
-                var descriptor = services.SingleOrDefault(
+                Bot descriptor = services.SingleOrDefault(
                     d => d.ServiceType == typeof(DbContextOptions<BotsContext>));
 
                 if (descriptor != null)
@@ -31,15 +31,15 @@ namespace Bots.IntegrationTests
                     context.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
 
-                var d2 = services.FirstOrDefault(d => d.ImplementationType == typeof(BotnetStatusUpdateReceiver));
+                ServiceDescriptor d2 = services.FirstOrDefault(d => d.ImplementationType == typeof(BotnetStatusUpdateReceiver));
                 if (d2 != null)
                 {
                     services.Remove(d2);
                 }
 
-                var sp = services.BuildServiceProvider();
+                ServiceProvider sp = services.BuildServiceProvider();
 
-                using (var scope = sp.CreateScope())
+                using (IServiceScope scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
                     var database = scopedServices.GetRequiredService<BotsContext>();

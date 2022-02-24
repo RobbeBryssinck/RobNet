@@ -34,7 +34,7 @@ namespace BotnetJobs.API.Controllers.v1
         {
             try
             {
-                var botnetJob = await _mediator.Send(new GetBotnetJobByBotnetIdQuery
+                BotnetJob botnetJob = await _mediator.Send(new GetBotnetJobByBotnetIdQuery
                 {
                     BotnetId = botnetId
                 });
@@ -62,7 +62,7 @@ namespace BotnetJobs.API.Controllers.v1
         {
             try
             {
-                var botnetJob = _mapper.Map<BotnetJob>(createBotnetJobModel);
+                BotnetJob botnetJob = _mapper.Map<BotnetJob>(createBotnetJobModel);
                 botnetJob.JobAction = "Start";
                 botnetJob.Status = "Working";
                 return await _mediator.Send(new CreateBotnetJobCommand
@@ -81,7 +81,7 @@ namespace BotnetJobs.API.Controllers.v1
         {
             try
             {
-                var botnetJob = await _mediator.Send(new GetBotnetJobByIdQuery
+                BotnetJob botnetJob = await _mediator.Send(new GetBotnetJobByIdQuery
                 {
                     Id = updateBotnetJobModel.Id
                 });
@@ -108,7 +108,7 @@ namespace BotnetJobs.API.Controllers.v1
         {
             try
             {
-                var botnetJob = await _mediator.Send(new GetBotnetJobByIdQuery
+                BotnetJob botnetJob = await _mediator.Send(new GetBotnetJobByIdQuery
                 {
                     Id = id
                 });

@@ -37,7 +37,7 @@ namespace Bots.Service.Test.Command
         {
             A.CallTo(() => _botRepository.UpdateAsync(A<Bot>._)).Returns(_bot);
 
-            var result = await _testee.Handle(new UpdateBotCommand(), default);
+            Bot result = await _testee.Handle(new UpdateBotCommand(), default);
 
             result.Should().BeOfType<Bot>();
             result.Platform.Should().Be(_bot.Platform);

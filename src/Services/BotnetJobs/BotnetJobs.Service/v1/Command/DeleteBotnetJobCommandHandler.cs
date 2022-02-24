@@ -20,7 +20,7 @@ namespace BotnetJobs.Service.v1.Command
 
         public async Task<BotnetJob> Handle(DeleteBotnetJobCommand request, CancellationToken cancellationToken)
         {
-            var botnetJob = await _botnetJobRepository.DeleteAsync(request.BotnetJob);
+            BotnetJob botnetJob = await _botnetJobRepository.DeleteAsync(request.BotnetJob);
 
             _botnetJobUpdateSender.SendBotnetJob(botnetJob);
 

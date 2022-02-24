@@ -18,7 +18,7 @@ namespace Bots.API.Test.Infrastructure.AutoMapper
 
         public MappingProfileTests()
         {
-            var mockMapper = new MapperConfiguration(cfg =>
+            MapperConfiguration mockMapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new MappingProfile());
             });
@@ -44,7 +44,7 @@ namespace Bots.API.Test.Infrastructure.AutoMapper
         [Fact]
         public void Map_Bot_CreateBotModel_ShouldHaveValidConfig()
         {
-            var configuration = new MapperConfiguration(cfg =>
+            MapperConfiguration configuration = new MapperConfiguration(cfg =>
                 cfg.CreateMap<Bot, CreateBotModel>());
 
             configuration.AssertConfigurationIsValid();
@@ -53,7 +53,7 @@ namespace Bots.API.Test.Infrastructure.AutoMapper
         [Fact]
         public void Map_Bot_UpdateBotModel_ShouldHaveValidConfig()
         {
-            var configuration = new MapperConfiguration(cfg =>
+            MapperConfiguration configuration = new MapperConfiguration(cfg =>
                 cfg.CreateMap<Bot, UpdateBotModel>());
 
             configuration.AssertConfigurationIsValid();
@@ -62,7 +62,7 @@ namespace Bots.API.Test.Infrastructure.AutoMapper
         [Fact]
         public void Map_Bot_Bot_ShouldHaveValidConfig()
         {
-            var configuration = new MapperConfiguration(cfg =>
+            MapperConfiguration configuration = new MapperConfiguration(cfg =>
                 cfg.CreateMap<Bot, Bot>());
 
             configuration.AssertConfigurationIsValid();
@@ -71,7 +71,7 @@ namespace Bots.API.Test.Infrastructure.AutoMapper
         [Fact]
         public void Map_CreateBotModel_Bot()
         {
-            var customer = _mapper.Map<Bot>(_createBotModel);
+            Bot customer = _mapper.Map<Bot>(_createBotModel);
 
             customer.IP.Should().Be(_createBotModel.IP);
             customer.Platform.Should().Be(_createBotModel.Platform);
@@ -82,7 +82,7 @@ namespace Bots.API.Test.Infrastructure.AutoMapper
         [Fact]
         public void Map_UpdateCustomerModel_Customer()
         {
-            var customer = _mapper.Map<Bot>(_updateBotModel);
+            Bot customer = _mapper.Map<Bot>(_updateBotModel);
 
             customer.Id.Should().Be(_updateBotModel.Id);
             customer.IP.Should().Be(_createBotModel.IP);
