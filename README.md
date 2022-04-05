@@ -9,7 +9,7 @@ This application allows their users to add bots to their botnet and control thos
 To run the project, the target machine must have Docker and Docker Compose installed.
 
 ## Installation
-This project is containerized in Docker and deployable with docker-compose. Clone the git repository, navigate to the "src" directory in the command line, and type "docker-compose up". The web application will be running at "localhost:3001".
+Make sure Docker is running. If it is, you can start the project by executing the start up script in the root directory of the project, "StartProject.bat".
 
 ## Development
 To set up the development environment, see CONTRIBUTE.md.
