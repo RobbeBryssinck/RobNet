@@ -5,6 +5,7 @@ To start contributing, please follow the following guidelines:
 * Adhere to the C# standard coding conventions (https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
 * Make pull requests to submit changes.
 * Create issues for new tasks before working on them, and label them appropriately.
+* Link pull requests to their relevant issues.
 
 ## Development environment
 To set up the development environment for the back end applications, please install Visual Studio with the following components:
