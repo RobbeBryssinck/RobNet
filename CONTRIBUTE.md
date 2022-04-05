@@ -4,6 +4,7 @@ To start contributing, please follow the following guidelines:
 * Make use of feature branches using the format "feature-featureName".
 * Adhere to the C# standard coding conventions (https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
 * Make pull requests to submit changes.
+* Create issues for new tasks before working on them, and label them appropriately.
 
 ## Development environment
 To set up the development environment for the back end applications, please install Visual Studio with the following components:
